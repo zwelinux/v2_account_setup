@@ -2,6 +2,13 @@
 from rest_framework import serializers
 from .models import CustomUser
 
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        # Include fields you want to expose
+        fields = ['id', 'username', 'email', 'profile_picture', 'phone_number', 'country', 'province', 'city', 'last_login']
+
+# Existing RegisterSerializer remains here...
 class RegisterSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True, required=True)
     password = serializers.CharField(write_only=True, required=True)

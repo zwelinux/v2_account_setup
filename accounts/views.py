@@ -9,8 +9,15 @@ from rest_framework.permissions import IsAuthenticated
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 import logging
+from rest_framework import generics
+from .models import CustomUser
+from .serializers import CustomUserSerializer
 
 logger = logging.getLogger(__name__)
+
+class UserListView(generics.ListAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
 
 class RegisterView(APIView):
     def post(self, request):
