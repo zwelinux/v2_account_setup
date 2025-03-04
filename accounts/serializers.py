@@ -45,3 +45,34 @@ class RegisterSerializer(serializers.ModelSerializer):
             city=validated_data.get('city', None),
         )
         return user
+
+# accounts/serializers.py
+from .models import Product
+
+class ProductSerializer(serializers.ModelSerializer):
+    seller = serializers.PrimaryKeyRelatedField(read_only=True)
+    image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = '__all__'  # Or list all fields plus "image_url" if you prefer
+
+    def get_image_url(self, obj):
+        request = self.context.get('request')
+        if obj.image and request:
+            return request.build_absolute_uri(obj.image.url)
+        return None
+
+
+
+from .models import Category, Brand
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+class BrandSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Brand
+        fields = '__all__'
