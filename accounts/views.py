@@ -12,6 +12,9 @@ import logging
 from rest_framework import generics
 from .models import CustomUser
 from .serializers import CustomUserSerializer
+from .utils import transform_avatar_api, download_image
+import os
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -19,14 +22,44 @@ class UserListView(generics.ListAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
 
+@method_decorator(csrf_exempt, name='dispatch')
 class RegisterView(APIView):
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            logger.info("User registered successfully.")
+            user = serializer.instance
+            logger.info("User registered successfully in DB for username: %s", user.username)
+            
+            # Process profile picture if uploaded
+            if 'profile_picture' in request.FILES:
+                try:
+                    original_path = user.profile_picture.path
+                    logger.info("Original profile picture path: %s", original_path)
+                    
+                    # Transform the image via external API
+                    avatar_url = transform_avatar_api(original_path)
+                    logger.info("Received avatar URL: %s", avatar_url)
+                    
+                    if avatar_url:
+                        base, ext = os.path.splitext(os.path.basename(original_path))
+                        transformed_filename = f"avatar_{base}{ext}"
+                        transformed_path = os.path.join(settings.MEDIA_ROOT, transformed_filename)
+                        logger.info("Transformed image will be saved as: %s", transformed_path)
+                        
+                        # Download the transformed image
+                        if download_image(avatar_url, transformed_path):
+                            user.profile_picture = transformed_filename
+                            user.save()
+                            logger.info("User profile picture updated to cartoon avatar: %s", transformed_filename)
+                        else:
+                            logger.error("Failed to download the transformed image.")
+                    else:
+                        logger.error("No avatar URL returned from the transformation API.")
+                except Exception as e:
+                    logger.error("Avatar transformation exception: %s", e)
             return Response({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
-        logger.info("Registration failed: %s", serializer.errors)
+        logger.error("Registration failed: %s", serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(APIView):
