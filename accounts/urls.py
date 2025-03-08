@@ -15,7 +15,7 @@ urlpatterns = [
     path('user/', UserView.as_view(), name='user'),
     path('users/', UserListView.as_view(), name='user-list'),
     path('myproducts/', MyProductsView.as_view(), name='my-products'),
-    path('products/<int:id>/', ProductDetailView.as_view(), name='product-detail'),
+    # path('products/<int:id>/', ProductDetailView.as_view(), name='product-detail'),
     path('profile/<str:username>/', PublicUserProfileView.as_view(), name='public-profile'),
     path('profile/<str:username>/products/', PublicUserProductsView.as_view(), name='public-user-products'),
     path('', include(router.urls)),
