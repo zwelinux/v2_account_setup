@@ -22,6 +22,21 @@ from rest_framework import generics
 
 logger = logging.getLogger(__name__)
 
+class PublicUserProfileView(APIView):
+    def get(self, request, username):
+        try:
+            user = CustomUser.objects.get(username=username)
+            serializer = CustomUserSerializer(user, context={'request': request})
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except CustomUser.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+class PublicUserProductsView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+    def get_queryset(self):
+        username = self.kwargs.get("username")
+        return Product.objects.filter(seller__username=username)
+
 # List all users endpoint
 class UserListView(generics.ListAPIView):
     queryset = CustomUser.objects.all()
