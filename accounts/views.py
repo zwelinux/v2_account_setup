@@ -190,22 +190,6 @@ class LoginView(APIView):
 
 # @method_decorator(csrf_exempt, name='dispatch')
 # class LoginView(APIView):
-#     authentication_classes = []  
-#     def post(self, request):
-#         username = request.data.get('username')
-#         password = request.data.get('password')
-#         logger.info("Login attempt for username: %s", username)
-#         user = authenticate(username=username, password=password)
-#         if user is not None:
-#             login(request, user)
-#             logger.info("Login successful for username: %s", username)
-#             return Response({"message": "Logged in successfully"}, status=status.HTTP_200_OK)
-#         logger.info("Authentication failed for username: %s", username)
-#         return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
-
-
-# @method_decorator(csrf_exempt, name='dispatch')
-# class LoginView(APIView):
 #     def post(self, request):
 #         username = request.data.get('username')
 #         password = request.data.get('password')

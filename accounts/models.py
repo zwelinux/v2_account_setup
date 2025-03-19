@@ -23,6 +23,7 @@ class CustomUser(AbstractUser):
 class Category(models.Model):
     title = models.CharField(max_length=255, unique=True)
     category_slug = models.SlugField(max_length=255, unique=True, blank=True)  # Auto-generated if blank
+    image = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "categories"
