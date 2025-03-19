@@ -235,20 +235,36 @@ class ProductViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication, SessionAuthentication]  # ✅ Ensure JWT is used
     permission_classes = [IsAuthenticatedOrReadOnly]  # ✅ Read: Anyone | Write: Authenticated
 
+    def get_serializer_context(self):
+        """✅ Ensure the request context is passed for generating absolute URLs."""
+        return {"request": self.request}
+
     def perform_create(self, serializer):
         """✅ Ensure only authenticated users can create products."""
-        if not self.request.user.is_authenticated:
-            return Response(
-                {"error": "Authentication credentials were not provided."},
-                status=status.HTTP_401_UNAUTHORIZED
-            )
         serializer.save(seller=self.request.user)
 
-    def get_serializer_context(self):
-        """✅ Include request in serializer context."""
-        context = super().get_serializer_context()
-        context.update({"request": self.request})
-        return context
+    def update(self, request, *args, **kwargs):
+        """✅ Ensure only the seller can update the product."""
+        instance = self.get_object()
+
+        if instance.seller != request.user:
+            logger.warning(
+                "Update forbidden: User %s is not the owner of product %s",
+                request.user.pk, instance.pk
+            )
+            return Response(
+                {"error": "You are not allowed to edit this product."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            logger.info("Product %s updated successfully by user %s.", instance.pk, request.user.pk)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        logger.error("Product update failed: %s", serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
         """✅ Ensure only the seller can delete the product."""
@@ -268,22 +284,17 @@ class ProductViewSet(viewsets.ModelViewSet):
         self.perform_destroy(instance)
         return Response({"message": "Product deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
 
-    def update(self, request, *args, **kwargs):
-        """✅ Ensure only the seller can update the product."""
+    def list(self, request, *args, **kwargs):
+        """✅ List all products with proper serializer context."""
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True, context={"request": request})  # ✅ Pass request context
+        return Response(serializer.data)
+
+    def retrieve(self, request, *args, **kwargs):
+        """✅ Retrieve a single product with full details."""
         instance = self.get_object()
-
-        if instance.seller != request.user:
-            return Response(
-                {"error": "You are not allowed to edit this product."},
-                status=status.HTTP_403_FORBIDDEN
-            )
-
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.get_serializer(instance, context={"request": request})  # ✅ Pass request context
+        return Response(serializer.data)
 
 
 

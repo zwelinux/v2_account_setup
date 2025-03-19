@@ -52,10 +52,32 @@ from .models import Product
 class ProductSerializer(serializers.ModelSerializer):
     seller = serializers.PrimaryKeyRelatedField(read_only=True)
     image_url = serializers.SerializerMethodField()
+    category_name = serializers.CharField(source="category.title", read_only=True)
+    brand_name = serializers.CharField(source="brand.title", read_only=True)  # Assuming 'title' is the field name
 
     class Meta:
         model = Product
-        fields = '__all__'  # Or list all fields plus "image_url" if you prefer
+        # fields = '__all__'  # Or list all fields plus "image_url" if you prefer
+        fields = [
+            "id",
+            "seller",
+            "image_url",
+            "title",
+            "product_slug",
+            "description",
+            "original_price",
+            "second_hand_price",
+            "size",
+            "condition",
+            "color",
+            "authenticity_document",
+            "image",
+            "created_at",
+            "category",  # Keep the category ID for reference
+            "category_name",  # ✅ New field for category name
+            "brand",  # Keep the brand ID for reference
+            "brand_name",  # ✅ New field for brand name
+        ]
 
     def get_image_url(self, obj):
         request = self.context.get('request')
