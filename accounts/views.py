@@ -162,20 +162,46 @@ class RegisterView(APIView):
         logger.error("Registration failed: %s", serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@method_decorator(csrf_exempt, name='dispatch')
 class LoginView(APIView):
-    authentication_classes = []  
+    """
+    Login users using EMAIL and password instead of username.
+    """
+
     def post(self, request):
-        username = request.data.get('username')
+        email = request.data.get('email')
         password = request.data.get('password')
-        logger.info("Login attempt for username: %s", username)
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            login(request, user)
-            logger.info("Login successful for username: %s", username)
-            return Response({"message": "Logged in successfully"}, status=status.HTTP_200_OK)
-        logger.info("Authentication failed for username: %s", username)
-        return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        try:
+            user = User.objects.get(email=email)  # ✅ Find user by email
+        except User.DoesNotExist:
+            return Response({"error": "Invalid email or password"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        if not user.check_password(password):
+            return Response({"error": "Invalid email or password"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        # ✅ Generate JWT tokens
+        refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
+
+        return Response({
+            "access": access_token,
+            "refresh": str(refresh)
+        }, status=status.HTTP_200_OK)
+
+# @method_decorator(csrf_exempt, name='dispatch')
+# class LoginView(APIView):
+#     authentication_classes = []  
+#     def post(self, request):
+#         username = request.data.get('username')
+#         password = request.data.get('password')
+#         logger.info("Login attempt for username: %s", username)
+#         user = authenticate(username=username, password=password)
+#         if user is not None:
+#             login(request, user)
+#             logger.info("Login successful for username: %s", username)
+#             return Response({"message": "Logged in successfully"}, status=status.HTTP_200_OK)
+#         logger.info("Authentication failed for username: %s", username)
+#         return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 # @method_decorator(csrf_exempt, name='dispatch')
