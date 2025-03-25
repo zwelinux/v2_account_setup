@@ -6,10 +6,10 @@ from django.utils import timezone
 # Custom user model
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)  # ✅ Ensure email is unique
-    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True) 
     phone_number = models.CharField(max_length=20, unique=True, null=True, blank=True)  # ✅ Ensure phone number is unique
     country = models.CharField(max_length=100, null=True, blank=True)
-    province = models.CharField(max_length=100, null=True, blank=True)
+    province = models.CharField(max_length=100, null=True, blank=True) 
     city = models.CharField(max_length=100, null=True, blank=True)
 
     USERNAME_FIELD = "email"  # ✅ Set email as the login field
