@@ -237,36 +237,31 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-@extend_schema(
-    parameters=[
-        OpenApiParameter(name='sort_by', description='Sort by field (a_z, z_a, low_to_high, high_to_low, date-acs, date-desc)', required=False, type=OpenApiTypes.STR),
-        OpenApiParameter(name='keyword', description='Search by product name, brand name, or category name', required=False, type=OpenApiTypes.STR),
-        OpenApiParameter(name='price_range', description='Price range formatted as min_max (e.g., 100_500)', required=False, type=OpenApiTypes.STR),
-        OpenApiParameter(name='limit', description='Number of products per page (default: 20)', required=False, type=OpenApiTypes.INT),
-        OpenApiParameter(name='page', description='Pagination page number', required=False, type=OpenApiTypes.INT),
-    ],
-    description="List all products with filtering, sorting, and pagination capabilities.",
-    responses={200: ProductSerializer(many=True)}
-)
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+from django.db.models import Q
+
 class ProductViewSet(viewsets.ModelViewSet):
     """Handles product operations (CRUD) with authentication & permissions."""
 
     serializer_class = ProductSerializer
     authentication_classes = [JWTAuthentication, SessionAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
-    pagination_class = ProductPagination  # ✅ Add pagination
+    pagination_class = ProductPagination
 
     def get_queryset(self):
-        """✅ Apply filters, keyword search, price range, and sorting."""
         queryset = Product.objects.all()
         request = self.request
 
-        # Filters
+        # ✅ Filters
         keyword = request.query_params.get('keyword')
         price_range = request.query_params.get('price_range')
-        sort_by = request.query_params.get('sort_by', 'date-desc')  # default to latest
+        sort_by = request.query_params.get('sort_by', 'date-desc')
+        category = request.query_params.get('category')  # ✅ Category filter
+        brand = request.query_params.get('brand')        # ✅ Brand filter
 
-        # ✅ Keyword filter: title / brand / category
         if keyword:
             queryset = queryset.filter(
                 Q(title__icontains=keyword) |
@@ -274,7 +269,6 @@ class ProductViewSet(viewsets.ModelViewSet):
                 Q(category__title__icontains=keyword)
             )
 
-        # ✅ Price filter
         if price_range:
             try:
                 min_price, max_price = map(float, price_range.split("_"))
@@ -283,9 +277,15 @@ class ProductViewSet(viewsets.ModelViewSet):
                     second_hand_price__lte=max_price
                 )
             except ValueError:
-                pass  # ignore bad format
+                pass
 
-        # ✅ Sorting map
+        if category and category.isdigit():
+            queryset = queryset.filter(category__id=category)
+
+        if brand and brand.isdigit():
+            queryset = queryset.filter(brand__id=brand)
+
+        # ✅ Sorting
         sort_map = {
             "a_z": "title",
             "z_a": "-title",
@@ -299,22 +299,18 @@ class ProductViewSet(viewsets.ModelViewSet):
         return queryset
 
     def get_serializer_context(self):
-        """Pass request context for full image URLs."""
         return {"request": self.request}
 
     def perform_create(self, serializer):
-        """Ensure only authenticated users can create products."""
         serializer.save(seller=self.request.user)
 
     def update(self, request, *args, **kwargs):
-        """Allow only seller to update the product."""
         instance = self.get_object()
         if instance.seller != request.user:
             return Response(
                 {"error": "You are not allowed to edit this product."},
                 status=status.HTTP_403_FORBIDDEN
             )
-
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -322,66 +318,39 @@ class ProductViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
-        """Allow only seller to delete the product."""
         instance = self.get_object()
         if instance.seller != request.user:
             return Response(
                 {"error": "You are not allowed to delete this product."},
                 status=status.HTTP_403_FORBIDDEN
             )
-
         self.perform_destroy(instance)
         return Response({"message": "Product deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
 
     @swagger_auto_schema(
         manual_parameters=[
-            openapi.Parameter(
-                'sort_by',
-                openapi.IN_QUERY,
-                description="Sorting options: a_z, z_a, low_to_high, high_to_low, date-acs, date-desc",
-                type=openapi.TYPE_STRING
-            ),
-            openapi.Parameter(
-                'keyword',
-                openapi.IN_QUERY,
-                description="Search by product name, brand, or category",
-                type=openapi.TYPE_STRING
-            ),
-            openapi.Parameter(
-                'price_range',
-                openapi.IN_QUERY,
-                description="Price range in min_max format (e.g., 100_500)",
-                type=openapi.TYPE_STRING
-            ),
-            openapi.Parameter(
-                'limit',
-                openapi.IN_QUERY,
-                description="Results per page (default: 20)",
-                type=openapi.TYPE_INTEGER
-            ),
-            openapi.Parameter(
-                'page',
-                openapi.IN_QUERY,
-                description="Page number",
-                type=openapi.TYPE_INTEGER
-            ),
+            openapi.Parameter("sort_by", openapi.IN_QUERY, description="Sorting options", type=openapi.TYPE_STRING),
+            openapi.Parameter("keyword", openapi.IN_QUERY, description="Search by product, brand, or category", type=openapi.TYPE_STRING),
+            openapi.Parameter("price_range", openapi.IN_QUERY, description="Price range: min_max (e.g., 100_500)", type=openapi.TYPE_STRING),
+            openapi.Parameter("category", openapi.IN_QUERY, description="Filter by category ID", type=openapi.TYPE_INTEGER),
+            openapi.Parameter("brand", openapi.IN_QUERY, description="Filter by brand ID", type=openapi.TYPE_INTEGER),
+            openapi.Parameter("limit", openapi.IN_QUERY, description="Results per page", type=openapi.TYPE_INTEGER),
+            openapi.Parameter("page", openapi.IN_QUERY, description="Page number", type=openapi.TYPE_INTEGER),
         ]
     )
-    
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         page = self.paginate_queryset(queryset)
         if page is not None:
-            serializer = self.get_serializer(page, many=True, context={"request": request})
+            serializer = self.get_serializer(page, many=True, context=self.get_serializer_context())
             return self.get_paginated_response(serializer.data)
 
-        serializer = self.get_serializer(queryset, many=True, context={"request": request})
+        serializer = self.get_serializer(queryset, many=True, context=self.get_serializer_context())
         return Response(serializer.data)
 
     def retrieve(self, request, *args, **kwargs):
-        """Retrieve a single product."""
         instance = self.get_object()
-        serializer = self.get_serializer(instance, context={"request": request})
+        serializer = self.get_serializer(instance, context=self.get_serializer_context())
         return Response(serializer.data)
 
 
