@@ -50,7 +50,8 @@ class RegisterSerializer(serializers.ModelSerializer):
 from .models import Product
 
 class ProductSerializer(serializers.ModelSerializer):
-    seller = serializers.PrimaryKeyRelatedField(read_only=True)
+    # seller = serializers.PrimaryKeyRelatedField(read_only=True)
+    seller = CustomUserSerializer(read_only=True)
     image_url = serializers.SerializerMethodField()
     category_name = serializers.CharField(source="category.title", read_only=True)
     brand_name = serializers.CharField(source="brand.title", read_only=True)  # Assuming 'title' is the field name
