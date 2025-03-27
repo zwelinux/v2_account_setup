@@ -445,4 +445,3 @@ class UpdateOrderStatusView(APIView):
             return Response({"message": "Order status updated successfully."})
         except Order.DoesNotExist:
             return Response({"error": "Order not found or you're not the seller."}, status=404)
-
