@@ -45,9 +45,54 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from .pagination import ProductPagination
 from django.db.models import Q
 
+from .models import Order
+from .serializers import OrderSerializer
+
+from .models import Order
+from .serializers import OrderSerializer
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import ListAPIView
+
 
 # Initialize Logger
 logger = logging.getLogger(__name__)
+
+class MyOrderHistoryView(ListAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Order.objects.filter(buyer=self.request.user).order_by('-created_at')
+
+class PlaceOrderView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
+    def post(self, request):
+        orders_data = request.data.get("orders", [])
+        if not orders_data:
+            return Response({"error": "No orders provided"}, status=400)
+
+        created_orders = []
+
+        for item in orders_data:
+            product_id = item.get("product")
+            quantity = item.get("quantity", 1)
+
+            try:
+                product = Product.objects.get(id=product_id)
+            except Product.DoesNotExist:
+                return Response({"error": f"Product with ID {product_id} not found"}, status=404)
+
+            order = Order.objects.create(
+                buyer=request.user,
+                product=product,
+                quantity=quantity,
+                total_price=product.second_hand_price * quantity,
+            )
+            created_orders.append(OrderSerializer(order).data)
+
+        return Response({"message": "Order(s) placed successfully", "orders": created_orders}, status=201)
 
 class PublicUserProfileView(RetrieveAPIView):
     """Fetches a public user profile by username."""
@@ -225,8 +270,20 @@ class UserView(APIView):
             "username": user.username,
             "email": user.email,
             "phone_number": user.phone_number,
+            "country": user.country,
+            "province": user.province,
+            "city": user.city,
             "last_login": user.last_login,
         }, status=200)
+    
+    def put(self, request):
+            user = request.user
+            data = request.data
+            user.country = data.get('country', user.country)
+            user.province = data.get('province', user.province)
+            user.city = data.get('city', user.city)
+            user.save()
+            return Response({"message": "Shipping address updated successfully."}, status=200)
 
 
 

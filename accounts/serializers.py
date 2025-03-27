@@ -2,6 +2,9 @@
 from rest_framework import serializers
 from .models import CustomUser
 
+from .models import Order
+
+
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
@@ -86,6 +89,12 @@ class ProductSerializer(serializers.ModelSerializer):
             return request.build_absolute_uri(obj.image.url) 
         return None
 
+class OrderSerializer(serializers.ModelSerializer):
+    product = ProductSerializer(read_only=True)
+
+    class Meta:
+        model = Order
+        fields = ['id', 'product', 'quantity', 'total_price', 'status', 'payment_status', 'created_at']
 
 
 from .models import Category, Brand

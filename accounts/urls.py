@@ -7,6 +7,8 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,     # for refreshing the access token
 )
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from .views import PlaceOrderView, MyOrderHistoryView
+
 
 router = routers.DefaultRouter()
 router.register(r'products', ProductViewSet, basename='products')  
@@ -24,5 +26,7 @@ urlpatterns = [
     path('myproducts/', MyProductsView.as_view(), name='my-products'),
     path('profile/<str:username>/', PublicUserProfileView.as_view(), name='public-profile'),
     path('profile/<str:username>/products/', PublicUserProductsView.as_view(), name='public-user-products'),
+    path('place-order/', PlaceOrderView.as_view(), name='place-order'),
+    path('myorders/', MyOrderHistoryView.as_view(), name='my-orders'),
     path('', include(router.urls)),
 ]
