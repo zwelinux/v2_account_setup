@@ -1,0 +1,25 @@
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+
+from . import views  # import the views module (ensure views.py is in the same app)
+
+router = DefaultRouter()
+router.register(r'products', views.ProductViewSet, basename='product')
+
+urlpatterns = [
+    # Auth routes
+    path('register/', views.register, name='register'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
+
+    # Order routes
+    path('orders/', views.place_order, name='place-order'),            # place a new order
+    path('orders/<int:order_id>/pay/', views.pay_order, name='pay-order'),  # pay for an order
+
+    # Public profile and listings
+    path('profile/<str:username>/', views.public_profile, name='public-profile'),
+    path('profile/<str:username>/products/', views.user_products, name='user-products'),
+
+    # Include product viewset routes (list, detail)
+    path('', include(router.urls)),
+]

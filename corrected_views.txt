@@ -1,0 +1,168 @@
+from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth.models import User
+from django.contrib.auth import login, logout  # for session-based login/logout if needed
+from django.shortcuts import get_object_or_404
+from django.db.models import Q
+
+from rest_framework import status, viewsets, generics, permissions, filters
+from rest_framework.decorators import api_view, permission_classes, action
+from rest_framework.response import Response
+
+# Import JWT utility (SimpleJWT) for token generation
+from rest_framework_simplejwt.tokens import RefreshToken
+
+# Import your serializers and models
+from .models import Product, Order  # assuming these models exist
+from .serializers import ProductSerializer, OrderSerializer, UserSerializer
+
+User = get_user_model()  # in case you use a custom User model
+
+# Registration view
+@api_view(['POST'])
+def register(request):
+    """Register a new user account."""
+    username = request.data.get('username')
+    password = request.data.get('password')
+    email = request.data.get('email')
+    if not username or not password:
+        return Response({"detail": "Username and password are required."},
+                        status=status.HTTP_400_BAD_REQUEST)
+    # Check if user already exists
+    if User.objects.filter(username=username).exists():
+        return Response({"detail": "Username is already taken."},
+                        status=status.HTTP_400_BAD_REQUEST)
+    try:
+        # Use create_user to ensure password is hashed
+        user = User.objects.create_user(username=username, password=password, email=email)
+    except Exception as e:
+        return Response({"detail": "Registration failed.", "error": str(e)},
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    # Optionally, automatically log the user in (create JWT token)
+    refresh = RefreshToken.for_user(user)
+    token_data = {
+        "refresh": str(refresh),
+        "access": str(refresh.access_token)
+    }
+    return Response({"message": "User registered successfully.", "token": token_data},
+                    status=status.HTTP_201_CREATED)
+
+# Login view
+@api_view(['POST'])
+def login_view(request):
+    """
+    Log in a user and return JWT token. Expects 'username' and 'password'.
+    """
+    username = request.data.get('username')
+    password = request.data.get('password')
+    if not username or not password:
+        return Response({"detail": "Please provide username and password."},
+                        status=status.HTTP_400_BAD_REQUEST)
+    user = authenticate(request, username=username, password=password)
+    if user is None:
+        # Authentication failed
+        return Response({"detail": "Invalid credentials."}, status=status.HTTP_401_UNAUTHORIZED)
+    # If using sessions alongside JWT (not typical for pure API, but included for completeness)
+    login(request, user)  # Logs in the user with a session if session middleware is enabled
+    # Generate JWT token for the authenticated user
+    refresh = RefreshToken.for_user(user)
+    token_data = {
+        "refresh": str(refresh),
+        "access": str(refresh.access_token)
+    }
+    return Response({"message": "Login successful.", "token": token_data},
+                    status=status.HTTP_200_OK)
+
+# Logout view
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def logout_view(request):
+    """
+    Log out the current user. Invalidate the token if using JWT by blacklisting (if configured).
+    For session auth, this will log out of the session.
+    """
+    # For session-based auth:
+    logout(request)
+    # For JWT, we can't truly invalidate the token without blacklisting, but we can inform the client to delete it.
+    return Response({"message": "Logged out successfully."}, status=status.HTTP_200_OK)
+
+# Place Order view
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def place_order(request):
+    """Place a new order for a product by an authenticated user."""
+    product_id = request.data.get('product_id')
+    if not product_id:
+        return Response({"detail": "Product ID is required."}, status=status.HTTP_400_BAD_REQUEST)
+    product = get_object_or_404(Product, id=product_id)
+    # (Optional: check product availability, stock, etc.)
+    try:
+        order = Order.objects.create(
+            product=product,
+            buyer=request.user,
+            quantity=request.data.get('quantity', 1),
+            payment_status='Pending'  # assuming 'Pending' is the default status
+        )
+    except Exception as e:
+        return Response({"detail": "Could not place order.", "error": str(e)},
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    serializer = OrderSerializer(order)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+# Payment (mock) view for an Order
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def pay_order(request, order_id):
+    """Mark an order as paid (mock payment)."""
+    order = get_object_or_404(Order, id=order_id)
+    # Only allow paying for your own order (or allow staff)
+    if order.buyer != request.user:
+        return Response({"detail": "You do not have permission to pay for this order."},
+                        status=status.HTTP_403_FORBIDDEN)
+    if order.payment_status.lower() == 'paid':
+        return Response({"detail": "Order is already paid."}, status=status.HTTP_400_BAD_REQUEST)
+    # Update payment status
+    order.payment_status = 'Paid'
+    order.save()
+    return Response({"message": f"Order {order.id} marked as Paid."}, status=status.HTTP_200_OK)
+
+# Public profile view
+@api_view(['GET'])
+def public_profile(request, username):
+    """Get public profile information for a user by username."""
+    user = get_object_or_404(User, username=username)
+    serializer = UserSerializer(user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+# User's product listing view
+@api_view(['GET'])
+def user_products(request, username):
+    """List all products for a given user (publicly accessible)."""
+    user = get_object_or_404(User, username=username)
+    products = Product.objects.filter(owner=user)
+    # Optionally filter out inactive products, etc: .filter(owner=user, is_active=True)
+    products = products.order_by('-id')  # example: sort by newest first
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+# Product viewset with filtering, sorting, and pagination
+class ProductViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for listing, retrieving, and managing products.
+    Allows filtering, searching, and ordering.
+    """
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    permission_classes = [permissions.AllowAny]  # anyone can view products; adjust if needed
+
+    # Filtering and searching
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name', 'description', 'category__name']  # adjust fields as relevant
+    ordering_fields = ['price', 'name', 'created_at']  # allow sorting by these fields
+    ordering = ['name']  # default ordering
+
+    # Pagination (use DRF default if set, otherwise define page size here)
+    # If global pagination is configured in settings, this is not necessary.
+    # from rest_framework.pagination import PageNumberPagination
+    # class _PageSizePagination(PageNumberPagination):
+    #     page_size = 20
+    # pagination_class = _PageSizePagination

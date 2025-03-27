@@ -53,6 +53,22 @@ from .serializers import OrderSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import ListAPIView
 
+from django.db.models import Q
+from .pagination import ProductPagination  # ✅ Make sure you’ve created the custom pagination class
+
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+from django.db.models import Q
+
+from rest_framework.decorators import action
+from rest_framework import permissions
+
 
 # Initialize Logger
 logger = logging.getLogger(__name__)
@@ -64,35 +80,6 @@ class MyOrderHistoryView(ListAPIView):
     def get_queryset(self):
         return Order.objects.filter(buyer=self.request.user).order_by('-created_at')
 
-class PlaceOrderView(APIView):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
-
-    def post(self, request):
-        orders_data = request.data.get("orders", [])
-        if not orders_data:
-            return Response({"error": "No orders provided"}, status=400)
-
-        created_orders = []
-
-        for item in orders_data:
-            product_id = item.get("product")
-            quantity = item.get("quantity", 1)
-
-            try:
-                product = Product.objects.get(id=product_id)
-            except Product.DoesNotExist:
-                return Response({"error": f"Product with ID {product_id} not found"}, status=404)
-
-            order = Order.objects.create(
-                buyer=request.user,
-                product=product,
-                quantity=quantity,
-                total_price=product.second_hand_price * quantity,
-            )
-            created_orders.append(OrderSerializer(order).data)
-
-        return Response({"message": "Order(s) placed successfully", "orders": created_orders}, status=201)
 
 class PublicUserProfileView(RetrieveAPIView):
     """Fetches a public user profile by username."""
@@ -134,24 +121,6 @@ class PublicUserProductsView(ListAPIView):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-# class PublicUserProfileView(APIView):
-#     permission_classes = [AllowAny]
-
-#     def get(self, request, username):
-#         try:
-#             user = CustomUser.objects.get(username=username)
-#             serializer = CustomUserSerializer(user, context={'request': request})
-#             return Response(serializer.data, status=status.HTTP_200_OK)
-#         except CustomUser.DoesNotExist:
-#             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-        
-# class PublicUserProductsView(generics.ListAPIView):
-#     serializer_class = ProductSerializer
-#     def get_queryset(self):
-#         username = self.kwargs.get("username")
-#         return Product.objects.filter(seller__username=username)
 
 # List all users endpoint
 class UserListView(generics.ListAPIView):
@@ -236,20 +205,6 @@ class LoginView(APIView):
             "refresh": str(refresh)
         }, status=status.HTTP_200_OK)
 
-# @method_decorator(csrf_exempt, name='dispatch')
-# class LoginView(APIView):
-#     def post(self, request):
-#         username = request.data.get('username')
-#         password = request.data.get('password')
-#         logger.info("Login attempt for username: %s", username)
-#         user = authenticate(username=username, password=password)
-#         if user is not None:
-#             login(request, user)  # Django updates last_login automatically here.
-#             logger.info("Authentication successful for username: %s", username)
-#             return Response({"message": "Logged in successfully"}, status=status.HTTP_200_OK)
-#         logger.info("Authentication failed for username: %s", username)
-#         return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
-
 @method_decorator(csrf_exempt, name='dispatch')
 class LogoutView(APIView):
     # Disable authentication for this endpoint to bypass CSRF checks
@@ -284,21 +239,6 @@ class UserView(APIView):
             user.city = data.get('city', user.city)
             user.save()
             return Response({"message": "Shipping address updated successfully."}, status=200)
-
-
-
-from django.db.models import Q
-from .pagination import ProductPagination  # ✅ Make sure you’ve created the custom pagination class
-
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
-
-from rest_framework import viewsets, status
-from rest_framework.response import Response
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
-from django.db.models import Q
 
 class ProductViewSet(viewsets.ModelViewSet):
     """Handles product operations (CRUD) with authentication & permissions."""
@@ -437,3 +377,72 @@ class MyProductsView(ListAPIView):
 
     def get_queryset(self):
         return Product.objects.filter(seller=self.request.user).order_by('-created_at')
+    
+
+
+
+class PlaceOrderView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
+    def post(self, request):
+        orders_data = request.data.get("orders", [])
+        if not orders_data:
+            return Response({"error": "No orders provided"}, status=400)
+
+        created_orders = []
+        for item in orders_data:
+            try:
+                product = Product.objects.get(id=item.get("product"))
+                order = Order.objects.create(
+                    buyer=request.user,
+                    product=product,
+                    quantity=item.get("quantity", 1),
+                    total_price=product.second_hand_price * item.get("quantity", 1),
+                )
+                created_orders.append(OrderSerializer(order).data)
+            except Product.DoesNotExist:
+                return Response({"error": f"Product with ID {item.get('product')} not found"}, status=404)
+
+        return Response({"message": "Order(s) placed successfully", "orders": created_orders})
+
+class OrderPaymentView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
+    def post(self, request, order_id):
+        try:
+            order = Order.objects.get(id=order_id, buyer=request.user)
+            if order.payment_status == 'Paid':
+                return Response({"message": "Order already paid."}, status=400)
+            order.payment_status = 'Paid'
+            order.save()
+            return Response({"message": "Payment successful."})
+        except Order.DoesNotExist:
+            return Response({"error": "Order not found."}, status=404)
+        
+class SellerOrderView(ListAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
+    def get_queryset(self):
+        return Order.objects.filter(product__seller=self.request.user).order_by('-created_at')
+
+class UpdateOrderStatusView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
+    def put(self, request, order_id):
+        status_value = request.data.get("status")
+        if status_value not in ['Pending', 'Shipped', 'Delivered']:
+            return Response({"error": "Invalid status"}, status=400)
+
+        try:
+            order = Order.objects.get(id=order_id, product__seller=request.user)
+            order.status = status_value
+            order.save()
+            return Response({"message": "Order status updated successfully."})
+        except Order.DoesNotExist:
+            return Response({"error": "Order not found or you're not the seller."}, status=404)
+
