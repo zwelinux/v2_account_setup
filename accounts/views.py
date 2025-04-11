@@ -127,83 +127,168 @@ class UserListView(generics.ListAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
 
-@method_decorator(csrf_exempt, name='dispatch')
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import status
+from .models import CustomUser
+from .serializers import RegisterSerializer
+import logging
+import os
+from django.conf import settings
+from .utils import transform_avatar_api, download_image
+
+# Logger to log events
+logger = logging.getLogger(__name__)
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
+from .models import CustomUser
+from .serializers import RegisterSerializer
+
 class RegisterView(APIView):
-    permission_classes = [AllowAny]  # ✅ Allow unauthenticated users
+    permission_classes = [AllowAny]  # Allow unauthenticated users
 
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
+        
         if serializer.is_valid():
-            user = serializer.save()
-            logger.info("User registered successfully in DB for username: %s", user.username)
+            # Retrieve form data
+            username = serializer.validated_data.get('username')
+            email = serializer.validated_data.get('email')
+            password = serializer.validated_data.get('password')
+            phone_number = serializer.validated_data.get('phone_number')
+            country = serializer.validated_data.get('country')
+            province = serializer.validated_data.get('province')
+            city = serializer.validated_data.get('city')
+            profile_picture = request.FILES.get('profile_picture', None)
 
-            # ✅ Generate JWT tokens for the user
+            # Check if the username is present; if not, use the email as the username
+            if not username:
+                username = email  # Set username to email if username is not provided
+
+            # Create user with username, email, password, etc.
+            user = CustomUser.objects.create_user(
+                username=username,
+                email=email,
+                password=password,
+                phone_number=phone_number,
+                country=country,
+                province=province,
+                city=city,
+                profile_picture=profile_picture
+            )
+
+            # Generate JWT tokens
             refresh = RefreshToken.for_user(user)
             access_token = str(refresh.access_token)
 
-            # ✅ Process profile picture if uploaded
-            if 'profile_picture' in request.FILES:
-                try:
-                    original_path = user.profile_picture.path
-                    logger.info("Original profile picture path: %s", original_path)
-
-                    # ✅ Transform the image via external API
-                    avatar_url = transform_avatar_api(original_path)
-                    logger.info("Received avatar URL: %s", avatar_url)
-
-                    if avatar_url:
-                        base, ext = os.path.splitext(os.path.basename(original_path))
-                        transformed_filename = f"avatar_{base}{ext}"
-                        transformed_path = os.path.join(settings.MEDIA_ROOT, transformed_filename)
-                        logger.info("Transformed image will be saved as: %s", transformed_path)
-
-                        # ✅ Download the transformed image
-                        if download_image(avatar_url, transformed_path):
-                            user.profile_picture = transformed_filename
-                            user.save()
-                            logger.info("User profile picture updated to cartoon avatar: %s", transformed_filename)
-                        else:
-                            logger.error("Failed to download the transformed image.")
-                    else:
-                        logger.error("No avatar URL returned from the transformation API.")
-                except Exception as e:
-                    logger.error("Avatar transformation exception: %s", e)
-
-            # ✅ Return user info along with JWT tokens
             return Response({
                 "message": "User created successfully",
-                "access": access_token,  # ✅ Send access token
-                "refresh": str(refresh)  # ✅ Send refresh token
+                "access": access_token,  # Send access token
+                "refresh": str(refresh)  # Send refresh token
             }, status=status.HTTP_201_CREATED)
 
-        logger.error("Registration failed: %s", serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# @method_decorator(csrf_exempt, name='dispatch')
+# class RegisterView(APIView):
+#     permission_classes = [AllowAny]  # ✅ Allow unauthenticated users
+
+#     def post(self, request):
+#         serializer = RegisterSerializer(data=request.data)
+#         if serializer.is_valid():
+#             user = serializer.save()
+#             logger.info("User registered successfully in DB for username: %s", user.username)
+
+#             # ✅ Generate JWT tokens for the user
+#             refresh = RefreshToken.for_user(user)
+#             access_token = str(refresh.access_token)
+
+#             # ✅ Process profile picture if uploaded
+#             if 'profile_picture' in request.FILES:
+#                 try:
+#                     original_path = user.profile_picture.path
+#                     logger.info("Original profile picture path: %s", original_path)
+
+#                     # ✅ Transform the image via external API
+#                     avatar_url = transform_avatar_api(original_path)
+#                     logger.info("Received avatar URL: %s", avatar_url)
+
+#                     if avatar_url:
+#                         base, ext = os.path.splitext(os.path.basename(original_path))
+#                         transformed_filename = f"avatar_{base}{ext}"
+#                         transformed_path = os.path.join(settings.MEDIA_ROOT, transformed_filename)
+#                         logger.info("Transformed image will be saved as: %s", transformed_path)
+
+#                         # ✅ Download the transformed image
+#                         if download_image(avatar_url, transformed_path):
+#                             user.profile_picture = transformed_filename
+#                             user.save()
+#                             logger.info("User profile picture updated to cartoon avatar: %s", transformed_filename)
+#                         else:
+#                             logger.error("Failed to download the transformed image.")
+#                     else:
+#                         logger.error("No avatar URL returned from the transformation API.")
+#                 except Exception as e:
+#                     logger.error("Avatar transformation exception: %s", e)
+
+#             # ✅ Return user info along with JWT tokens
+#             return Response({
+#                 "message": "User created successfully",
+#                 "access": access_token,  # ✅ Send access token
+#                 "refresh": str(refresh)  # ✅ Send refresh token
+#             }, status=status.HTTP_201_CREATED)
+
+#         logger.error("Registration failed: %s", serializer.errors)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# views.py
+# accounts/views.py
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate
+from rest_framework.permissions import AllowAny
+
 class LoginView(APIView):
-    """
-    Login users using EMAIL and password instead of username.
-    """
+    permission_classes = [AllowAny]
 
     def post(self, request):
-        email = request.data.get('email')
+        identifier = request.data.get('email') or request.data.get('phone_number')
         password = request.data.get('password')
+        logger.info(f"Login attempt with identifier: {identifier}")
 
-        try:
-            user = User.objects.get(email=email)  # ✅ Find user by email
-        except User.DoesNotExist:
-            return Response({"error": "Invalid email or password"}, status=status.HTTP_401_UNAUTHORIZED)
+        if not identifier or not password:
+            return Response(
+                {"error": "Email or phone number and password are required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-        if not user.check_password(password):
-            return Response({"error": "Invalid email or password"}, status=status.HTTP_401_UNAUTHORIZED)
+        # Authenticate using the custom backend
+        user = authenticate(request, username=identifier, password=password)
 
-        # ✅ Generate JWT tokens
-        refresh = RefreshToken.for_user(user)
-        access_token = str(refresh.access_token)
+        if user is not None:
+            # Generate JWT tokens
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
+                "user": {
+                    "id": user.id,
+                    "username": user.username,
+                    "email": user.email,
+                    "phone_number": user.phone_number
+                }
+            }, status=status.HTTP_200_OK)
+        return Response(
+            {"error": "Invalid email/phone number or password"},
+            status=status.HTTP_401_UNAUTHORIZED
+        )
 
-        return Response({
-            "access": access_token,
-            "refresh": str(refresh)
-        }, status=status.HTTP_200_OK)
 
 @method_decorator(csrf_exempt, name='dispatch')
 class LogoutView(APIView):

@@ -1,23 +1,22 @@
 # accounts/urls.py
 from django.urls import path, include
 from rest_framework import routers
-from .views import RegisterView, LoginView, LogoutView, UserView, ProductViewSet, UserListView, CategoryViewSet, BrandViewSet, MyProductsView, ProductDetailView, PublicUserProfileView, PublicUserProductsView
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,  # for obtaining the token pair (access and refresh)
-    TokenRefreshView,     # for refreshing the access token
+from .views import (
+    RegisterView, LoginView, LogoutView, UserView, ProductViewSet, UserListView, 
+    CategoryViewSet, BrandViewSet, MyProductsView, ProductDetailView, 
+    PublicUserProfileView, PublicUserProductsView, PlaceOrderView, 
+    MyOrderHistoryView, OrderPaymentView, SellerOrderView, UpdateOrderStatusView
 )
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import PlaceOrderView, MyOrderHistoryView, OrderPaymentView, SellerOrderView, UpdateOrderStatusView
-
+from rest_framework_simplejwt.views import TokenRefreshView
 
 router = routers.DefaultRouter()
-router.register(r'products', ProductViewSet, basename='products')  
+router.register(r'products', ProductViewSet, basename='products')
 router.register(r'categories', CategoryViewSet)
 router.register(r'brands', BrandViewSet)
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('login/', LoginView.as_view(), name='login'),  
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('user/', UserView.as_view(), name='user'),

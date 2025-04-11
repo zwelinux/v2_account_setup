@@ -46,6 +46,11 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
+AUTHENTICATION_BACKENDS = [
+    'accounts.authentication.CustomAuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend',  # Keep default backend as fallback
+]
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -164,4 +169,3 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
