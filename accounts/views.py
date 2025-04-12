@@ -530,3 +530,101 @@ class UpdateOrderStatusView(APIView):
             return Response({"message": "Order status updated successfully."})
         except Order.DoesNotExist:
             return Response({"error": "Order not found or you're not the seller."}, status=404)
+        
+
+# accounts/views.py
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import AllowAny
+from django.core.mail import send_mail
+from django.conf import settings
+from django.utils.crypto import get_random_string
+from .models import CustomUser, PasswordResetToken
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+
+# accounts/views.py
+class ForgotPasswordView(APIView):
+    permission_classes = [AllowAny]
+
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={'email': openapi.Schema(type=openapi.TYPE_STRING)},
+            required=['email'],
+        ),
+        responses={200: 'Reset link sent', 400: 'Email required', 404: 'User not found'}
+    )
+    def post(self, request):
+        email = request.data.get('email')
+        if not email:
+            return Response({"error": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = CustomUser.objects.get(email=email)
+            token = get_random_string(length=32)
+            PasswordResetToken.objects.filter(user=user).delete()  # Clear old tokens
+            reset_token = PasswordResetToken(user=user, token=token)
+            reset_token.save()
+
+            # Point to the frontend URL
+            # reset_url = f"http://localhost:3000/reset-password/{token}/"  # Frontend URL for local testing
+            # For production: 
+            reset_url = f"https://ladyfirst.me/reset-password/{token}/"
+            
+            send_mail(
+                "Password Reset Request",
+                f"Click to reset your password: {reset_url}\nValid for 1 hour.",
+                settings.DEFAULT_FROM_EMAIL,
+                [user.email],
+                fail_silently=False,
+            )
+            logger.info(f"Password reset link sent to {email}")
+            return Response({"message": "Reset link sent to your email"}, status=status.HTTP_200_OK)
+        except CustomUser.DoesNotExist:
+            logger.warning(f"Reset requested for non-existent email: {email}")
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger.error(f"Error sending reset email: {str(e)}")
+            return Response({"error": "Failed to send reset email"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# accounts/views.py
+class ResetPasswordView(APIView):
+    permission_classes = [AllowAny]
+
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'new_password': openapi.Schema(type=openapi.TYPE_STRING),
+                'confirm_password': openapi.Schema(type=openapi.TYPE_STRING),
+            },
+            required=['new_password', 'confirm_password'],
+        ),
+        responses={200: 'Password reset', 400: 'Invalid input', 404: 'Invalid/expired token'}
+    )
+    def post(self, request, token):  # Add token as a parameter
+        new_password = request.data.get('new_password')
+        confirm_password = request.data.get('confirm_password')
+
+        if not all([new_password, confirm_password]):
+            return Response({"error": "All fields are required"}, status=status.HTTP_400_BAD_REQUEST)
+        if new_password != confirm_password:
+            return Response({"error": "Passwords do not match"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            reset_token = PasswordResetToken.objects.get(token=token)
+            if not reset_token.is_valid():
+                reset_token.delete()
+                return Response({"error": "Token has expired"}, status=status.HTTP_404_NOT_FOUND)
+
+            user = reset_token.user
+            user.set_password(new_password)
+            user.save()
+            reset_token.delete()
+            logger.info(f"Password reset for {user.email}")
+            return Response({"message": "Password reset successfully"}, status=status.HTTP_200_OK)
+        except PasswordResetToken.DoesNotExist:
+            logger.warning(f"Invalid reset token: {token}")
+            return Response({"error": "Invalid or expired token"}, status=status.HTTP_404_NOT_FOUND)

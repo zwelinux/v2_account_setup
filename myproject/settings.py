@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-*9rmjr6+os*if$n=6xn$a$oj5+=kp-$z0z)0&h^)@2m=y&-o2v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', 'ladyfirstme.pythonanywhere.com',]
 
 
 # Application definition
@@ -46,10 +46,6 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
-AUTHENTICATION_BACKENDS = [
-    'accounts.authentication.CustomAuthenticationBackend',
-    'django.contrib.auth.backends.ModelBackend',  # Keep default backend as fallback
-]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -64,15 +60,29 @@ MIDDLEWARE = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', 'https://ladyfirst.me']
 SESSION_COOKIE_SAMESITE = None
 CSRF_COOKIE_SAMESITE = None
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 
+# myproject/settings.py
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Development
+# For production (e.g., Gmail):
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'info.ladyfirst.me@gmail.com'
+EMAIL_HOST_PASSWORD = 'xfdfvyyzncmuwcll'
+DEFAULT_FROM_EMAIL = 'support@ladyfirst.com'
+
+
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -82,6 +92,12 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',  # ✅ Enable this
     ),
 }
+
+AUTHENTICATION_BACKENDS = [
+    'accounts.authentication.CustomAuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend',  # Keep default backend as fallback
+]
+
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),  # Adjust token expiration (1 day)

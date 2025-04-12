@@ -190,3 +190,26 @@ class Review(models.Model):
 
     class Meta:
         unique_together = ('reviewer', 'seller')
+
+
+# accounts/models.py
+from django.db import models
+from django.utils import timezone
+from .models import CustomUser  # Already imported
+
+class PasswordResetToken(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    token = models.CharField(max_length=100, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+
+    def is_valid(self):
+        return timezone.now() <= self.expires_at
+
+    def save(self, *args, **kwargs):
+        if not self.expires_at:
+            self.expires_at = timezone.now() + timezone.timedelta(hours=1)  # 1-hour validity
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Reset token for {self.user.email}"
