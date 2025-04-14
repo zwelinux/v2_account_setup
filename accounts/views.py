@@ -30,6 +30,8 @@ from .utils import transform_avatar_api, download_image
 from .authentication import CsrfExemptSessionAuthentication
 from .pagination import ProductPagination
 
+# favor before ui flow 
+
 # Initialize Logger
 logger = logging.getLogger(__name__)
 
