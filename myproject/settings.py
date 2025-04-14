@@ -78,7 +78,6 @@ EMAIL_HOST_PASSWORD = 'xfdfvyyzncmuwcll'
 DEFAULT_FROM_EMAIL = 'support@ladyfirst.com'
 
 
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',

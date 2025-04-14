@@ -21,7 +21,7 @@ from django.contrib.auth.forms import AdminPasswordChangeForm
 class CustomUserAdmin(BaseUserAdmin):
     model = CustomUser
     change_password_form = AdminPasswordChangeForm
-    list_display = ( 'username', 'email', 'phone_number', 'is_staff', 'is_active', 'country', 'city', 'province')
+    list_display = ( 'username', 'email', 'phone_number', 'country', 'city', 'province', 'postal_code', 'waist', 'height_cm', 'chest_bust', 'waist', 'hip', 'inseam', 'foot_size_us')
     list_filter = ('is_staff', 'is_active')
     fieldsets = (
         (None, {'fields': ('email', 'password')}),

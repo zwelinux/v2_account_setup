@@ -2,73 +2,33 @@ import logging
 import os
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
+from django.core.mail import send_mail
+from django.utils.crypto import get_random_string
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics, viewsets
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.authentication import SessionAuthentication
+from django.db.models import Q
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 from .serializers import (
     RegisterSerializer,
     CustomUserSerializer,
     ProductSerializer,
     CategorySerializer,
-    BrandSerializer
+    BrandSerializer,
+    OrderSerializer
 )
-from .models import CustomUser, Product, Category, Brand
+from .models import CustomUser, Product, Category, Brand, Order, PasswordResetToken
 from .utils import transform_avatar_api, download_image
 from .authentication import CsrfExemptSessionAuthentication
-from rest_framework import generics
-from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import AllowAny
-
-from rest_framework.generics import RetrieveAPIView, ListAPIView
-from rest_framework import status
-import logging
-
-from .models import CustomUser, Product
-from .serializers import CustomUserSerializer, ProductSerializer
-from rest_framework_simplejwt.tokens import RefreshToken
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.permissions import AllowAny
-from .serializers import RegisterSerializer
-import logging
-import os
-from django.conf import settings
-from .utils import transform_avatar_api, download_image
-from rest_framework_simplejwt.authentication import JWTAuthentication
-
 from .pagination import ProductPagination
-from django.db.models import Q
-
-from .models import Order
-from .serializers import OrderSerializer
-
-from .models import Order
-from .serializers import OrderSerializer
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.generics import ListAPIView
-
-from django.db.models import Q
-from .pagination import ProductPagination  # ✅ Make sure you’ve created the custom pagination class
-
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
-
-from rest_framework import viewsets, status
-from rest_framework.response import Response
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
-from django.db.models import Q
-
-from rest_framework.decorators import action
-from rest_framework import permissions
-
 
 # Initialize Logger
 logger = logging.getLogger(__name__)
@@ -79,7 +39,6 @@ class MyOrderHistoryView(ListAPIView):
 
     def get_queryset(self):
         return Order.objects.filter(buyer=self.request.user).order_by('-created_at')
-
 
 class PublicUserProfileView(RetrieveAPIView):
     """Fetches a public user profile by username."""
@@ -100,11 +59,10 @@ class PublicUserProfileView(RetrieveAPIView):
             logger.error(f"Error fetching user profile: {str(e)}")
             return Response({"error": "Internal server error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
 class PublicUserProductsView(ListAPIView):
     """Fetches all products uploaded by a user (publicly visible)."""
     serializer_class = ProductSerializer
-    permission_classes = [AllowAny]  #
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         username = self.kwargs.get("username")
@@ -127,136 +85,96 @@ class UserListView(generics.ListAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework import status
-from .models import CustomUser
-from .serializers import RegisterSerializer
-import logging
-import os
-from django.conf import settings
-from .utils import transform_avatar_api, download_image
-
-# Logger to log events
-logger = logging.getLogger(__name__)
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework_simplejwt.tokens import RefreshToken
-from .models import CustomUser
-from .serializers import RegisterSerializer
-
+# views.py (only the relevant part is shown)
+# views.py
 class RegisterView(APIView):
-    permission_classes = [AllowAny]  # Allow unauthenticated users
+    permission_classes = [AllowAny]
 
+    @swagger_auto_schema(
+        operation_description="Register a new user",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'username': openapi.Schema(type=openapi.TYPE_STRING, description='User name'),
+                'email': openapi.Schema(type=openapi.TYPE_STRING, format='email', description='User email (required if phone_number is not provided)'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password'),
+                'confirm_password': openapi.Schema(type=openapi.TYPE_STRING, description='Password confirmation'),
+                'phone_number': openapi.Schema(type=openapi.TYPE_STRING, description='Phone number with country code (e.g., +95123456789) (required if email is not provided)'),
+                'country': openapi.Schema(type=openapi.TYPE_STRING),
+                'province': openapi.Schema(type=openapi.TYPE_STRING),
+                'city': openapi.Schema(type=openapi.TYPE_STRING),
+                'weight_kg': openapi.Schema(type=openapi.TYPE_NUMBER, description='Weight in kg (optional)'),
+                'height_cm': openapi.Schema(type=openapi.TYPE_NUMBER, description='Height in cm (optional)'),
+                'chest_bust': openapi.Schema(type=openapi.TYPE_NUMBER, description='Chest/Bust in cm (optional)'),
+                'waist': openapi.Schema(type=openapi.TYPE_NUMBER, description='Waist in cm (optional)'),
+                'hip': openapi.Schema(type=openapi.TYPE_NUMBER, description='Hip in cm (optional)'),
+                'inseam': openapi.Schema(type=openapi.TYPE_NUMBER, description='Inseam in cm (optional)'),
+                'foot_size_us': openapi.Schema(type=openapi.TYPE_NUMBER, description='Foot size in US (optional)'),
+                'postal_code': openapi.Schema(type=openapi.TYPE_STRING, description='Postal code (required)'),
+                'full_address': openapi.Schema(type=openapi.TYPE_STRING, description='Full address (optional)'),
+            },
+            required=['username', 'password', 'confirm_password', 'postal_code'],  # Removed email and phone_number from required
+            example={
+                'username': 'john_doe',
+                'email': 'john@example.com',
+                'password': 'your_password_here',
+                'confirm_password': 'your_password_here',
+                'phone_number': '+95123456789',
+                'country': 'Myanmar',
+                'province': 'Yangon',
+                'city': 'Yangon',
+                'postal_code': '11181',
+                'full_address': '123 Main Street, Apt 4B',
+                'weight_kg': 70.5,
+                'height_cm': 170.0,
+            }
+        ),
+        responses={
+            201: openapi.Response("User created successfully"),
+            400: openapi.Response("Validation error")
+        }
+    )
     def post(self, request):
+        logger.info("Received registration data: %s", request.data)
         serializer = RegisterSerializer(data=request.data)
         
         if serializer.is_valid():
-            # Retrieve form data
-            username = serializer.validated_data.get('username')
-            email = serializer.validated_data.get('email')
-            password = serializer.validated_data.get('password')
-            phone_number = serializer.validated_data.get('phone_number')
-            country = serializer.validated_data.get('country')
-            province = serializer.validated_data.get('province')
-            city = serializer.validated_data.get('city')
-            profile_picture = request.FILES.get('profile_picture', None)
-
-            # Check if the username is present; if not, use the email as the username
-            if not username:
-                username = email  # Set username to email if username is not provided
-
-            # Create user with username, email, password, etc.
-            user = CustomUser.objects.create_user(
-                username=username,
-                email=email,
-                password=password,
-                phone_number=phone_number,
-                country=country,
-                province=province,
-                city=city,
-                profile_picture=profile_picture
-            )
-
-            # Generate JWT tokens
+            user = serializer.save()
             refresh = RefreshToken.for_user(user)
             access_token = str(refresh.access_token)
-
             return Response({
                 "message": "User created successfully",
-                "access": access_token,  # Send access token
-                "refresh": str(refresh)  # Send refresh token
+                "access": access_token,
+                "refresh": str(refresh)
             }, status=status.HTTP_201_CREATED)
 
+        logger.error("Registration failed: %s", serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# @method_decorator(csrf_exempt, name='dispatch')
-# class RegisterView(APIView):
-#     permission_classes = [AllowAny]  # ✅ Allow unauthenticated users
-
-#     def post(self, request):
-#         serializer = RegisterSerializer(data=request.data)
-#         if serializer.is_valid():
-#             user = serializer.save()
-#             logger.info("User registered successfully in DB for username: %s", user.username)
-
-#             # ✅ Generate JWT tokens for the user
-#             refresh = RefreshToken.for_user(user)
-#             access_token = str(refresh.access_token)
-
-#             # ✅ Process profile picture if uploaded
-#             if 'profile_picture' in request.FILES:
-#                 try:
-#                     original_path = user.profile_picture.path
-#                     logger.info("Original profile picture path: %s", original_path)
-
-#                     # ✅ Transform the image via external API
-#                     avatar_url = transform_avatar_api(original_path)
-#                     logger.info("Received avatar URL: %s", avatar_url)
-
-#                     if avatar_url:
-#                         base, ext = os.path.splitext(os.path.basename(original_path))
-#                         transformed_filename = f"avatar_{base}{ext}"
-#                         transformed_path = os.path.join(settings.MEDIA_ROOT, transformed_filename)
-#                         logger.info("Transformed image will be saved as: %s", transformed_path)
-
-#                         # ✅ Download the transformed image
-#                         if download_image(avatar_url, transformed_path):
-#                             user.profile_picture = transformed_filename
-#                             user.save()
-#                             logger.info("User profile picture updated to cartoon avatar: %s", transformed_filename)
-#                         else:
-#                             logger.error("Failed to download the transformed image.")
-#                     else:
-#                         logger.error("No avatar URL returned from the transformation API.")
-#                 except Exception as e:
-#                     logger.error("Avatar transformation exception: %s", e)
-
-#             # ✅ Return user info along with JWT tokens
-#             return Response({
-#                 "message": "User created successfully",
-#                 "access": access_token,  # ✅ Send access token
-#                 "refresh": str(refresh)  # ✅ Send refresh token
-#             }, status=status.HTTP_201_CREATED)
-
-#         logger.error("Registration failed: %s", serializer.errors)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# views.py
-# accounts/views.py
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth import authenticate
-from rest_framework.permissions import AllowAny
 
 class LoginView(APIView):
     permission_classes = [AllowAny]
 
+    @swagger_auto_schema(
+        operation_description="Login using either email or phone number along with password",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'email': openapi.Schema(type=openapi.TYPE_STRING, format='email', description='User email (optional)'),
+                'phone_number': openapi.Schema(type=openapi.TYPE_STRING, description='User phone number with country code (e.g., +95123456789) (optional)'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='User password'),
+            },
+            required=['password'],
+            example={
+                'phone_number': '+95123456789',
+                'password': 'your_password_here'
+            }
+        ),
+        responses={
+            200: openapi.Response("Login successful"),
+            400: openapi.Response("Missing credentials"),
+            401: openapi.Response("Invalid credentials")
+        }
+    )
     def post(self, request):
         identifier = request.data.get('email') or request.data.get('phone_number')
         password = request.data.get('password')
@@ -265,6 +183,13 @@ class LoginView(APIView):
         if not identifier or not password:
             return Response(
                 {"error": "Email or phone number and password are required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Validate phone number format if provided
+        if request.data.get('phone_number') and not identifier.startswith('+'):
+            return Response(
+                {"error": "Phone number must include country code (e.g., +95123456789)."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -289,10 +214,73 @@ class LoginView(APIView):
             status=status.HTTP_401_UNAUTHORIZED
         )
 
+# ... (rest of views.py remains unchanged)
+
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+
+    @swagger_auto_schema(
+        operation_description="Login using either email or phone number along with password",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'email': openapi.Schema(type=openapi.TYPE_STRING, format='email', description='User email (optional)'),
+                'phone_number': openapi.Schema(type=openapi.TYPE_STRING, description='User phone number with country code (e.g., +12025550123) (optional)'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='User password'),
+            },
+            required=['password'],
+            example={
+                'phone_number': '+12025550123',
+                'password': 'your_password_here'
+            }
+        ),
+        responses={
+            200: openapi.Response("Login successful"),
+            400: openapi.Response("Missing credentials"),
+            401: openapi.Response("Invalid credentials")
+        }
+    )
+    def post(self, request):
+        identifier = request.data.get('email') or request.data.get('phone_number')
+        password = request.data.get('password')
+        logger.info(f"Login attempt with identifier: {identifier}")
+
+        if not identifier or not password:
+            return Response(
+                {"error": "Email or phone number and password are required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Validate phone number format if provided
+        if request.data.get('phone_number') and not identifier.startswith('+'):
+            return Response(
+                {"error": "Phone number must include country code (e.g., +12025550123)."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Authenticate using the custom backend
+        user = authenticate(request, username=identifier, password=password)
+
+        if user is not None:
+            # Generate JWT tokens
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
+                "user": {
+                    "id": user.id,
+                    "username": user.username,
+                    "email": user.email,
+                    "phone_number": user.phone_number
+                }
+            }, status=status.HTTP_200_OK)
+        return Response(
+            {"error": "Invalid email/phone number or password"},
+            status=status.HTTP_401_UNAUTHORIZED
+        )
 
 @method_decorator(csrf_exempt, name='dispatch')
 class LogoutView(APIView):
-    # Disable authentication for this endpoint to bypass CSRF checks
     authentication_classes = []
     permission_classes = []
 
@@ -302,7 +290,7 @@ class LogoutView(APIView):
         return Response({"message": "Logged out successfully"}, status=status.HTTP_200_OK)
 
 class UserView(APIView):
-    permission_classes = [IsAuthenticated]  # ✅ Requires authentication
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         user = request.user
@@ -317,17 +305,15 @@ class UserView(APIView):
         }, status=200)
     
     def put(self, request):
-            user = request.user
-            data = request.data
-            user.country = data.get('country', user.country)
-            user.province = data.get('province', user.province)
-            user.city = data.get('city', user.city)
-            user.save()
-            return Response({"message": "Shipping address updated successfully."}, status=200)
+        user = request.user
+        data = request.data
+        user.country = data.get('country', user.country)
+        user.province = data.get('province', user.province)
+        user.city = data.get('city', user.city)
+        user.save()
+        return Response({"message": "Shipping address updated successfully."}, status=200)
 
 class ProductViewSet(viewsets.ModelViewSet):
-    """Handles product operations (CRUD) with authentication & permissions."""
-
     serializer_class = ProductSerializer
     authentication_classes = [JWTAuthentication, SessionAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -337,12 +323,11 @@ class ProductViewSet(viewsets.ModelViewSet):
         queryset = Product.objects.all()
         request = self.request
 
-        # ✅ Filters
         keyword = request.query_params.get('keyword')
         price_range = request.query_params.get('price_range')
         sort_by = request.query_params.get('sort_by', 'date-desc')
-        category = request.query_params.get('category')  # ✅ Category filter
-        brand = request.query_params.get('brand')        # ✅ Brand filter
+        category = request.query_params.get('category')
+        brand = request.query_params.get('brand')
 
         if keyword:
             queryset = queryset.filter(
@@ -367,7 +352,6 @@ class ProductViewSet(viewsets.ModelViewSet):
         if brand and brand.isdigit():
             queryset = queryset.filter(brand__id=brand)
 
-        # ✅ Sorting
         sort_map = {
             "a_z": "title",
             "z_a": "-title",
@@ -435,13 +419,10 @@ class ProductViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance, context=self.get_serializer_context())
         return Response(serializer.data)
 
-
-
 class ProductDetailView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'id'
-
 
 @method_decorator(csrf_exempt, name='dispatch')
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -457,14 +438,11 @@ class BrandViewSet(viewsets.ModelViewSet):
 
 class MyProductsView(ListAPIView):
     serializer_class = ProductSerializer
-    authentication_classes = [JWTAuthentication]  # ✅ Ensure JWT is used
-    permission_classes = [IsAuthenticated]  # ✅ Only authenticated users can access
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Product.objects.filter(seller=self.request.user).order_by('-created_at')
-    
-
-
 
 class PlaceOrderView(APIView):
     permission_classes = [IsAuthenticated]
@@ -505,7 +483,7 @@ class OrderPaymentView(APIView):
             return Response({"message": "Payment successful."})
         except Order.DoesNotExist:
             return Response({"error": "Order not found."}, status=404)
-        
+
 class SellerOrderView(ListAPIView):
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
@@ -530,31 +508,23 @@ class UpdateOrderStatusView(APIView):
             return Response({"message": "Order status updated successfully."})
         except Order.DoesNotExist:
             return Response({"error": "Order not found or you're not the seller."}, status=404)
-        
 
-# accounts/views.py
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.permissions import AllowAny
-from django.core.mail import send_mail
-from django.conf import settings
-from django.utils.crypto import get_random_string
-from .models import CustomUser, PasswordResetToken
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
-
-# accounts/views.py
 class ForgotPasswordView(APIView):
     permission_classes = [AllowAny]
 
     @swagger_auto_schema(
+        operation_description="Send a password reset link to the user's email address",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
-            properties={'email': openapi.Schema(type=openapi.TYPE_STRING)},
+            properties={'email': openapi.Schema(type=openapi.TYPE_STRING, description='Registered email address')},
             required=['email'],
+            example={ 'email': 'user@example.com' }
         ),
-        responses={200: 'Reset link sent', 400: 'Email required', 404: 'User not found'}
+        responses={
+            200: openapi.Response("Reset link sent"),
+            400: openapi.Response("Email required"),
+            404: openapi.Response("User not found")
+        }
     )
     def post(self, request):
         email = request.data.get('email')
@@ -568,9 +538,6 @@ class ForgotPasswordView(APIView):
             reset_token = PasswordResetToken(user=user, token=token)
             reset_token.save()
 
-            # Point to the frontend URL
-            # reset_url = f"http://localhost:3000/reset-password/{token}/"  # Frontend URL for local testing
-            # For production: 
             reset_url = f"https://ladyfirst.me/reset-password/{token}/"
             
             send_mail(
@@ -589,22 +556,30 @@ class ForgotPasswordView(APIView):
             logger.error(f"Error sending reset email: {str(e)}")
             return Response({"error": "Failed to send reset email"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-# accounts/views.py
 class ResetPasswordView(APIView):
     permission_classes = [AllowAny]
 
     @swagger_auto_schema(
+        operation_description="Reset user's password using a valid token",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
-                'new_password': openapi.Schema(type=openapi.TYPE_STRING),
-                'confirm_password': openapi.Schema(type=openapi.TYPE_STRING),
+                'new_password': openapi.Schema(type=openapi.TYPE_STRING, description='New password'),
+                'confirm_password': openapi.Schema(type=openapi.TYPE_STRING, description='Confirm new password'),
             },
             required=['new_password', 'confirm_password'],
+            example={
+                'new_password': 'new_secure_password',
+                'confirm_password': 'new_secure_password'
+            }
         ),
-        responses={200: 'Password reset', 400: 'Invalid input', 404: 'Invalid/expired token'}
+        responses={
+            200: openapi.Response("Password reset successfully"),
+            400: openapi.Response("Invalid input"),
+            404: openapi.Response("Invalid or expired token")
+        }
     )
-    def post(self, request, token):  # Add token as a parameter
+    def post(self, request, token):
         new_password = request.data.get('new_password')
         confirm_password = request.data.get('confirm_password')
 

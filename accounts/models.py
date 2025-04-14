@@ -1,28 +1,43 @@
+# models.py
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.text import slugify
 from django.utils import timezone
 
-# Custom user model
+# models.py
 class CustomUser(AbstractUser):
-    email = models.EmailField(unique=True) 
-    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True) 
-    phone_number = models.CharField(max_length=20, unique=True)
+    email = models.EmailField(unique=True, null=True, blank=True)  # Now optional
+    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
+    phone_number = models.CharField(max_length=20, unique=True, null=True, blank=True)  # Now optional
     country = models.CharField(max_length=100, null=True, blank=True)
-    province = models.CharField(max_length=100, null=True, blank=True) 
+    province = models.CharField(max_length=100, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
+    postal_code = models.CharField(max_length=20)
+    full_address = models.TextField(null=True, blank=True)
+    weight_kg = models.FloatField(null=True, blank=True)
+    height_cm = models.FloatField(null=True, blank=True)
+    chest_bust = models.FloatField(null=True, blank=True)
+    waist = models.FloatField(null=True, blank=True)
+    hip = models.FloatField(null=True, blank=True)
+    inseam = models.FloatField(null=True, blank=True)
+    foot_size_us = models.FloatField(null=True, blank=True)
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username"]  
+    USERNAME_FIELD = "email"  # We'll need to adjust this
+    REQUIRED_FIELDS = ["username"]
 
     def __str__(self):
-        return self.email  
+        return self.email or self.phone_number or self.username
 
+    def save(self, *args, **kwargs):
+        # Ensure at least one of email or phone_number is provided
+        if not self.email and not self.phone_number:
+            raise ValueError("Either email or phone number must be provided.")
+        super().save(*args, **kwargs)
 
 # Category model
 class Category(models.Model):
     title = models.CharField(max_length=255, unique=True)
-    category_slug = models.SlugField(max_length=255, unique=True, blank=True)  # Auto-generated if blank
+    category_slug = models.SlugField(max_length=255, unique=True, blank=True)
     image = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
 
     class Meta:
@@ -41,7 +56,6 @@ class Category(models.Model):
                 count += 1
             self.category_slug = unique_slug
         super().save(*args, **kwargs)
-
 
 # Brand model
 class Brand(models.Model):
@@ -64,7 +78,6 @@ class Brand(models.Model):
                 count += 1
             self.brand_slug = unique_slug
         super().save(*args, **kwargs)
-
 
 # Product model
 class Product(models.Model):
@@ -135,7 +148,6 @@ class Product(models.Model):
             self.product_slug = unique_slug
         super().save(*args, **kwargs)
 
-
 # Order model
 class Order(models.Model):
     ORDER_STATUS_CHOICES = [
@@ -162,7 +174,6 @@ class Order(models.Model):
             self.total_price = self.product.second_hand_price * self.quantity
         super().save(*args, **kwargs)
 
-
 # Message model
 class Message(models.Model):
     sender = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='sent_messages')
@@ -178,7 +189,6 @@ class Message(models.Model):
             self.read_at = timezone.now()
             self.save(update_fields=['is_read', 'read_at'])
 
-
 # Review model
 class Review(models.Model):
     reviewer = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -191,11 +201,10 @@ class Review(models.Model):
     class Meta:
         unique_together = ('reviewer', 'seller')
 
-
 # accounts/models.py
 from django.db import models
 from django.utils import timezone
-from .models import CustomUser  # Already imported
+from .models import CustomUser
 
 class PasswordResetToken(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
