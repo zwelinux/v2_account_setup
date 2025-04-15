@@ -1,0 +1,574 @@
+INFO 2025-04-14 08:56:52,406 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-14 08:57:03,427 log Not Found: /api/auth/send-otp/
+INFO 2025-04-14 08:59:44,911 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-14 09:02:10,235 log Not Found: /auth/send-otp/
+INFO 2025-04-14 09:06:56,233 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-14 09:06:56,874 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 09:14:15,658 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/models.py changed, reloading.
+INFO 2025-04-14 09:14:16,638 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 09:14:53,290 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/serializers.py changed, reloading.
+INFO 2025-04-14 09:14:53,862 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 09:15:05,716 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/urls.py changed, reloading.
+INFO 2025-04-14 09:15:06,394 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 09:17:40,459 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-14 09:17:41,273 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 09:18:06,681 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/myproject/settings.py changed, reloading.
+INFO 2025-04-14 09:18:07,202 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 09:18:24,915 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-14 09:18:25,470 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 09:18:39,579 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/myproject/settings.py changed, reloading.
+INFO 2025-04-14 09:18:40,241 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 09:19:27,068 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/myproject/settings.py changed, reloading.
+INFO 2025-04-14 09:19:27,620 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 09:22:33,716 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-14 09:24:00,012 log Not Found: /auth/send-otp/
+INFO 2025-04-14 09:24:08,103 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/myproject/settings.py changed, reloading.
+INFO 2025-04-14 09:24:08,677 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 09:37:23,042 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/serializers.py changed, reloading.
+INFO 2025-04-14 09:37:23,750 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 09:38:58,537 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-14 09:38:59,090 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 09:39:28,149 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/models.py changed, reloading.
+INFO 2025-04-14 09:39:28,666 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 09:41:03,480 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-14 09:41:10,111 log Not Found: /api/auth/send-otp/
+INFO 2025-04-14 09:46:43,964 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/myproject/urls.py changed, reloading.
+INFO 2025-04-14 09:46:44,604 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 10:03:05,634 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-14 10:03:18,054 log Not Found: /api/auth/send-otp/
+INFO 2025-04-14 10:05:40,774 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/urls.py changed, reloading.
+INFO 2025-04-14 10:05:41,411 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 10:05:57,736 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 10:06:09,858 views OTP sent to email: todayisyatyarzar@gmail.com
+INFO 2025-04-14 10:06:25,167 views User 68 created successfully via OTP
+INFO 2025-04-14 10:06:32,174 views Login attempt with identifier (length: 25)
+WARNING 2025-04-14 10:06:32,492 authentication Authentication failed for user ID 67: Invalid password or inactive user.
+INFO 2025-04-14 10:06:32,796 views User 68 logged in successfully
+INFO 2025-04-14 10:07:53,170 views Account setup completed for user ID 68
+WARNING 2025-04-14 10:10:03,934 log Not Found: /api/products/
+WARNING 2025-04-14 10:10:03,966 log Not Found: /api/products/
+WARNING 2025-04-14 10:10:16,274 log Not Found: /api/products/
+WARNING 2025-04-14 10:10:16,301 log Not Found: /api/products/
+WARNING 2025-04-14 10:10:21,872 log Unauthorized: /api/auth/logout/
+INFO 2025-04-14 10:10:36,055 views Login attempt with identifier (length: 14)
+WARNING 2025-04-14 10:10:36,437 authentication Authentication failed for user ID 68: Invalid password or inactive user.
+WARNING 2025-04-14 10:10:36,743 log Unauthorized: /api/auth/login/
+INFO 2025-04-14 10:10:38,918 views Login attempt with identifier (length: 14)
+INFO 2025-04-14 10:10:39,228 authentication User 68 authenticated successfully.
+INFO 2025-04-14 10:10:39,231 views User 68 logged in successfully
+WARNING 2025-04-14 10:10:39,297 log Not Found: /api/products/
+WARNING 2025-04-14 10:10:39,302 log Not Found: /api/products/
+WARNING 2025-04-14 10:10:39,345 log Not Found: /api/products/
+WARNING 2025-04-14 10:10:39,354 log Not Found: /api/products/
+WARNING 2025-04-14 10:10:42,393 log Not Found: /api/auth/profile/zwelinnhtet/products/
+WARNING 2025-04-14 10:10:42,399 log Not Found: /api/auth/profile/zwelinnhtet/products/
+WARNING 2025-04-14 10:10:42,420 log Not Found: /api/auth/profile/zwelinnhtet/products/
+WARNING 2025-04-14 10:10:42,429 log Not Found: /api/auth/profile/zwelinnhtet/products/
+WARNING 2025-04-14 10:10:42,441 log Not Found: /media/default_profile.jpg
+WARNING 2025-04-14 10:10:47,637 log Unauthorized: /api/auth/logout/
+INFO 2025-04-14 10:10:53,697 authentication User 1 authenticated successfully.
+INFO 2025-04-14 10:11:12,843 views OTP 455996 would be sent to phone: +6609766109458
+INFO 2025-04-14 10:11:49,116 views User 69 created successfully via OTP
+INFO 2025-04-14 10:12:21,157 views Login attempt with identifier (length: 14)
+INFO 2025-04-14 10:12:21,176 authentication User with phone number not found (length: 14).
+WARNING 2025-04-14 10:12:21,481 log Unauthorized: /api/auth/login/
+INFO 2025-04-14 10:12:25,954 views Login attempt with identifier (length: 14)
+INFO 2025-04-14 10:12:25,956 authentication User with phone number not found (length: 14).
+WARNING 2025-04-14 10:12:26,269 log Unauthorized: /api/auth/login/
+INFO 2025-04-14 10:12:56,480 views OTP 291010 would be sent to phone: +6609766109458
+INFO 2025-04-14 10:13:19,710 views User 70 created successfully via OTP
+INFO 2025-04-14 10:13:33,990 views Login attempt with identifier (length: 14)
+INFO 2025-04-14 10:13:34,308 authentication User 70 authenticated successfully.
+INFO 2025-04-14 10:13:34,310 views User 70 logged in successfully
+INFO 2025-04-14 10:14:08,592 views Account setup completed for user ID 70
+WARNING 2025-04-14 10:14:10,648 log Not Found: /api/products/
+WARNING 2025-04-14 10:14:10,660 log Not Found: /api/products/
+WARNING 2025-04-14 10:14:10,684 log Not Found: /api/products/
+WARNING 2025-04-14 10:14:10,695 log Not Found: /api/products/
+INFO 2025-04-14 10:16:10,826 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/urls.py changed, reloading.
+INFO 2025-04-14 10:16:11,446 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 10:20:04,964 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-14 10:20:05,650 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 10:20:39,107 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-14 10:20:39,669 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 10:20:55,301 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-14 10:20:55,795 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-14 10:21:18,352 log Unauthorized: /api/auth/logout/
+INFO 2025-04-14 10:29:06,581 views OTP 593374 would be sent to phone: +660877777777
+INFO 2025-04-14 10:29:20,826 views User 71 created successfully via OTP
+INFO 2025-04-14 10:29:33,605 views Login attempt with identifier (length: 13)
+INFO 2025-04-14 10:29:33,921 authentication User 71 authenticated successfully.
+INFO 2025-04-14 10:29:33,923 views User 71 logged in successfully
+INFO 2025-04-14 10:30:12,212 views Account setup completed for user ID 71
+WARNING 2025-04-14 10:30:15,742 log Not Found: /api/auth/profile/zwe/products/
+WARNING 2025-04-14 10:30:15,751 log Not Found: /api/auth/profile/zwe/products/
+WARNING 2025-04-14 10:30:15,758 log Not Found: /api/auth/profile/zwe/products/
+WARNING 2025-04-14 10:30:15,771 log Not Found: /api/auth/profile/zwe/products/
+WARNING 2025-04-14 10:30:15,786 log Not Found: /media/default_profile.jpg
+WARNING 2025-04-14 10:30:21,407 log Not Found: /api/auth/myproducts/
+WARNING 2025-04-14 10:30:21,416 log Not Found: /api/auth/myproducts/
+WARNING 2025-04-14 10:30:21,426 log Not Found: /api/auth/myproducts/
+WARNING 2025-04-14 10:30:21,432 log Not Found: /api/auth/myproducts/
+WARNING 2025-04-14 10:30:37,426 log Not Found: /api/auth/myorders/
+WARNING 2025-04-14 10:30:37,436 log Not Found: /api/auth/myorders/
+WARNING 2025-04-14 10:30:37,451 log Not Found: /api/auth/myorders/
+WARNING 2025-04-14 10:30:37,459 log Not Found: /api/auth/myorders/
+WARNING 2025-04-14 10:30:40,240 log Not Found: /api/auth/myorders/
+WARNING 2025-04-14 10:30:40,250 log Not Found: /api/auth/myorders/
+WARNING 2025-04-14 10:31:20,336 log Unauthorized: /api/auth/logout/
+INFO 2025-04-14 10:31:35,181 views OTP 214858 would be sent to phone: +660877777777
+INFO 2025-04-14 10:32:07,007 views User 72 created successfully via OTP
+INFO 2025-04-14 10:32:16,567 views Login attempt with identifier (length: 13)
+INFO 2025-04-14 10:32:16,876 authentication User 72 authenticated successfully.
+INFO 2025-04-14 10:32:16,878 views User 72 logged in successfully
+INFO 2025-04-14 10:33:02,963 views Account setup completed for user ID 72
+WARNING 2025-04-14 10:33:10,232 log Unauthorized: /api/auth/logout/
+INFO 2025-04-14 10:36:46,797 views Login attempt with identifier (length: 13)
+INFO 2025-04-14 10:36:47,119 authentication User 72 authenticated successfully.
+INFO 2025-04-14 10:36:47,122 views User 72 logged in successfully
+WARNING 2025-04-14 10:36:48,753 log Unauthorized: /api/auth/logout/
+INFO 2025-04-14 10:37:00,749 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/authentication.py changed, reloading.
+INFO 2025-04-14 10:37:01,678 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 10:37:34,966 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-14 10:37:35,527 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 10:38:07,192 views Login attempt with identifier (length: 13)
+INFO 2025-04-14 10:38:07,509 authentication User 72 authenticated successfully.
+INFO 2025-04-14 10:38:07,519 views User 72 logged in successfully
+WARNING 2025-04-14 10:38:09,377 log Not Found: /api/auth/profile/zwe/products/
+WARNING 2025-04-14 10:38:09,393 log Not Found: /api/auth/profile/zwe/products/
+WARNING 2025-04-14 10:38:09,403 log Not Found: /api/auth/profile/zwe/products/
+WARNING 2025-04-14 10:38:09,412 log Not Found: /api/auth/profile/zwe/products/
+WARNING 2025-04-14 10:38:09,422 log Not Found: /media/default_profile.jpg
+WARNING 2025-04-14 10:38:18,685 log Unauthorized: /api/auth/logout/
+INFO 2025-04-14 10:39:38,796 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-14 10:39:39,348 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 10:43:33,680 views OTP 611665 would be sent to phone: +660877777777
+INFO 2025-04-14 10:43:48,861 views User 73 created successfully via OTP
+INFO 2025-04-14 10:43:57,571 views Login attempt with identifier (length: 13)
+INFO 2025-04-14 10:43:57,889 authentication User 73 authenticated successfully.
+INFO 2025-04-14 10:43:57,892 views User 73 logged in successfully
+INFO 2025-04-14 10:50:28,518 views Account setup completed for user ID 73
+WARNING 2025-04-14 10:50:51,588 log Not Found: /api/auth/myproducts/
+WARNING 2025-04-14 10:50:51,596 log Not Found: /api/auth/myproducts/
+WARNING 2025-04-14 10:50:51,610 log Not Found: /api/auth/myproducts/
+WARNING 2025-04-14 10:50:51,618 log Not Found: /api/auth/myproducts/
+INFO 2025-04-14 10:51:06,863 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-14 10:51:07,538 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-14 10:51:38,664 log Unauthorized: /api/auth/logout/
+INFO 2025-04-14 10:51:47,031 views Password reset link sent for user ID 73
+INFO 2025-04-14 10:52:10,616 views Password reset for user ID 73
+INFO 2025-04-14 10:52:26,516 views Login attempt with identifier (length: 14)
+INFO 2025-04-14 10:52:26,829 authentication User 73 authenticated successfully.
+INFO 2025-04-14 10:52:26,838 views User 73 logged in successfully
+WARNING 2025-04-14 10:52:28,948 log Unauthorized: /api/auth/logout/
+INFO 2025-04-14 10:52:36,468 views Login attempt with identifier (length: 13)
+WARNING 2025-04-14 10:52:36,814 authentication Authentication failed for user ID 73: Invalid password or inactive user.
+WARNING 2025-04-14 10:52:37,116 log Unauthorized: /api/auth/login/
+INFO 2025-04-14 10:52:41,432 views Login attempt with identifier (length: 13)
+INFO 2025-04-14 10:52:41,748 authentication User 73 authenticated successfully.
+INFO 2025-04-14 10:52:41,750 views User 73 logged in successfully
+WARNING 2025-04-14 10:56:49,562 log Unauthorized: /api/auth/logout/
+INFO 2025-04-14 10:56:58,228 views Login attempt with identifier (length: 13)
+INFO 2025-04-14 10:56:58,543 authentication User 73 authenticated successfully.
+INFO 2025-04-14 10:56:58,546 views User 73 logged in successfully
+WARNING 2025-04-14 10:57:01,281 log Unauthorized: /api/auth/logout/
+INFO 2025-04-14 11:02:11,594 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/urls.py changed, reloading.
+INFO 2025-04-14 11:02:12,265 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 11:02:22,822 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/urls.py changed, reloading.
+INFO 2025-04-14 11:02:23,310 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 11:02:26,724 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/urls.py changed, reloading.
+INFO 2025-04-14 11:02:27,112 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 11:02:44,953 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/urls.py changed, reloading.
+INFO 2025-04-14 11:02:45,436 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 11:03:37,241 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-14 11:03:37,787 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 11:04:24,767 views Login attempt with identifier (length: 13)
+INFO 2025-04-14 11:04:25,081 authentication User 73 authenticated successfully.
+INFO 2025-04-14 11:04:25,092 views User 73 logged in successfully
+WARNING 2025-04-14 11:04:26,625 log Unauthorized: /api/auth/logout/
+INFO 2025-04-14 11:07:55,943 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 11:11:18,462 views Login attempt with identifier (length: 13)
+INFO 2025-04-14 11:11:18,786 authentication User 73 authenticated successfully.
+INFO 2025-04-14 11:11:18,796 views User 73 logged in successfully
+INFO 2025-04-14 11:11:28,613 views User 73 logged out successfully
+INFO 2025-04-14 11:12:02,748 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-14 11:12:03,454 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 11:16:08,561 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-14 11:16:09,098 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 11:23:32,521 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-14 11:23:33,132 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 11:24:39,626 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-14 11:24:40,187 autoreload Watching for file changes with StatReloader
+INFO 2025-04-14 11:24:52,845 views Login attempt with identifier (length: 12)
+INFO 2025-04-14 11:24:52,850 authentication User with phone number not found (length: 12).
+WARNING 2025-04-14 11:24:53,164 log Unauthorized: /api/auth/login/
+INFO 2025-04-14 11:25:08,427 views Login attempt with identifier (length: 13)
+WARNING 2025-04-14 11:25:08,739 authentication Authentication failed for user ID 73: Invalid password or inactive user.
+WARNING 2025-04-14 11:25:09,041 log Unauthorized: /api/auth/login/
+INFO 2025-04-14 11:25:18,818 views Login attempt with identifier (length: 13)
+INFO 2025-04-14 11:25:19,125 authentication User 73 authenticated successfully.
+INFO 2025-04-14 11:25:19,137 views User 73 logged in successfully
+INFO 2025-04-14 11:25:23,874 views User 73 logged out successfully
+INFO 2025-04-14 11:25:38,569 views Login attempt with identifier (length: 13)
+INFO 2025-04-14 11:25:38,875 authentication User 73 authenticated successfully.
+INFO 2025-04-14 11:25:38,877 views User 73 logged in successfully
+INFO 2025-04-14 11:25:41,744 views User 73 logged out successfully
+INFO 2025-04-15 04:12:51,135 views Login attempt with identifier (length: 13)
+INFO 2025-04-15 04:12:51,520 authentication User 73 authenticated successfully.
+INFO 2025-04-15 04:12:51,523 views User 73 logged in successfully
+INFO 2025-04-15 04:12:52,974 views User 73 logged out successfully
+INFO 2025-04-15 04:13:18,915 views OTP sent to email: zwelinux.testing@gmail.com
+INFO 2025-04-15 04:13:47,984 views User 74 created successfully via OTP
+INFO 2025-04-15 04:14:04,064 views Login attempt with identifier (length: 26)
+INFO 2025-04-15 04:14:04,381 authentication User 74 authenticated successfully.
+INFO 2025-04-15 04:14:04,384 views User 74 logged in successfully
+INFO 2025-04-15 04:23:04,545 views User 74 logged out successfully
+INFO 2025-04-15 04:23:14,857 views Login attempt with identifier (length: 26)
+INFO 2025-04-15 04:23:15,175 authentication User 74 authenticated successfully.
+INFO 2025-04-15 04:23:15,178 views User 74 logged in successfully
+INFO 2025-04-15 04:23:16,899 views User 74 logged out successfully
+INFO 2025-04-15 04:27:52,208 views Login attempt with identifier (length: 26)
+INFO 2025-04-15 04:27:52,533 authentication User 74 authenticated successfully.
+INFO 2025-04-15 04:27:52,536 views User 74 logged in successfully
+INFO 2025-04-15 04:30:57,368 views Account setup completed for user ID 74
+WARNING 2025-04-15 04:31:01,453 log Not Found: /api/auth/profile/htet/products/
+WARNING 2025-04-15 04:31:01,467 log Not Found: /api/auth/profile/htet/products/
+WARNING 2025-04-15 04:31:01,479 log Not Found: /api/auth/profile/htet/products/
+WARNING 2025-04-15 04:31:01,495 log Not Found: /api/auth/profile/htet/products/
+WARNING 2025-04-15 04:31:01,504 log Not Found: /media/default_profile.jpg
+INFO 2025-04-15 04:31:07,928 views User 74 logged out successfully
+INFO 2025-04-15 04:31:18,670 views Login attempt with identifier (length: 13)
+INFO 2025-04-15 04:31:18,981 authentication User 74 authenticated successfully.
+INFO 2025-04-15 04:31:18,983 views User 74 logged in successfully
+INFO 2025-04-15 04:32:19,756 views User 74 logged out successfully
+INFO 2025-04-15 04:35:37,562 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 04:35:38,396 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 04:35:57,233 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 04:35:57,832 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 04:39:11,871 views Password reset link sent via email for user ID 74
+INFO 2025-04-15 04:39:45,533 views Password reset for user ID 74
+INFO 2025-04-15 04:39:57,646 views Login attempt with identifier (length: 13)
+INFO 2025-04-15 04:39:57,966 authentication User 74 authenticated successfully.
+INFO 2025-04-15 04:39:57,979 views User 74 logged in successfully
+INFO 2025-04-15 04:39:59,500 views User 74 logged out successfully
+INFO 2025-04-15 04:40:07,492 views Password reset link sent via email for user ID 74
+INFO 2025-04-15 04:40:27,083 views Password reset for user ID 74
+INFO 2025-04-15 04:40:39,876 views Login attempt with identifier (length: 13)
+INFO 2025-04-15 04:40:40,184 authentication User 74 authenticated successfully.
+INFO 2025-04-15 04:40:40,187 views User 74 logged in successfully
+INFO 2025-04-15 04:40:42,884 views User 74 logged out successfully
+INFO 2025-04-15 04:42:42,972 views Password reset link sent via email for user ID 74
+WARNING 2025-04-15 04:43:22,565 views Invalid reset token: N6RuWnu0wdAbotYz3jTylGojdCXNW1nh
+WARNING 2025-04-15 04:43:22,566 log Not Found: /api/auth/reset-password/N6RuWnu0wdAbotYz3jTylGojdCXNW1nh/
+INFO 2025-04-15 04:43:59,056 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/authentication.py changed, reloading.
+INFO 2025-04-15 04:43:59,612 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:02:10,590 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:02:11,239 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:02:24,048 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:02:24,586 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:02:40,360 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:02:40,910 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:02:46,327 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:02:46,880 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:03:08,804 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:03:09,313 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:03:32,326 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:03:33,009 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:06:59,275 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:06:59,917 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:07:12,556 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:07:13,072 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:07:23,606 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:07:24,100 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:07:35,697 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:07:36,228 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:07:42,681 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:07:43,159 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:07:50,540 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:07:51,073 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:07:58,483 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:07:58,973 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:08:05,331 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:08:05,841 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:08:12,265 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:08:12,825 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:08:22,371 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:08:22,860 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:08:32,376 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:08:32,863 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:08:39,316 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:08:39,867 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:08:43,270 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:08:43,688 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:08:46,146 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:09:24,754 views OTP sent to email: zwelinux.testing@gmail.com
+INFO 2025-04-15 06:09:46,264 views User 75 created successfully via OTP
+INFO 2025-04-15 06:09:54,950 views Login attempt with identifier (length: 26)
+INFO 2025-04-15 06:09:55,265 authentication User 75 authenticated successfully.
+INFO 2025-04-15 06:09:55,267 views User 75 logged in successfully
+INFO 2025-04-15 06:10:38,669 views Account setup completed for user ID 75
+INFO 2025-04-15 06:10:45,954 views User 75 logged out successfully
+INFO 2025-04-15 06:10:59,018 views Login attempt with identifier (length: 14)
+INFO 2025-04-15 06:10:59,021 authentication User with phone number not found (length: 14).
+WARNING 2025-04-15 06:10:59,328 log Unauthorized: /api/auth/login/
+INFO 2025-04-15 06:11:06,738 views Login attempt with identifier (length: 14)
+INFO 2025-04-15 06:11:07,057 authentication User 75 authenticated successfully.
+INFO 2025-04-15 06:11:07,059 views User 75 logged in successfully
+INFO 2025-04-15 06:11:09,205 views User 75 logged out successfully
+INFO 2025-04-15 06:11:21,905 views Password reset link sent via email for user ID 75
+INFO 2025-04-15 06:11:42,546 views Password reset for user ID 75
+INFO 2025-04-15 06:12:03,455 views Login attempt with identifier (length: 26)
+INFO 2025-04-15 06:12:03,774 authentication User 75 authenticated successfully.
+INFO 2025-04-15 06:12:03,777 views User 75 logged in successfully
+INFO 2025-04-15 06:12:06,121 views User 75 logged out successfully
+INFO 2025-04-15 06:12:17,615 views Login attempt with identifier (length: 14)
+INFO 2025-04-15 06:12:17,929 authentication User 75 authenticated successfully.
+INFO 2025-04-15 06:12:17,932 views User 75 logged in successfully
+INFO 2025-04-15 06:12:23,180 views User 75 logged out successfully
+INFO 2025-04-15 06:12:37,439 views OTP 861364 would be sent to phone: +6608768705220
+INFO 2025-04-15 06:12:58,290 views User 76 created successfully via OTP
+INFO 2025-04-15 06:13:12,486 views Login attempt with identifier (length: 14)
+INFO 2025-04-15 06:13:12,796 authentication User 76 authenticated successfully.
+INFO 2025-04-15 06:13:12,799 views User 76 logged in successfully
+INFO 2025-04-15 06:13:40,948 views Account setup completed for user ID 76
+INFO 2025-04-15 06:13:46,594 views User 76 logged out successfully
+INFO 2025-04-15 06:13:52,253 views Login attempt with identifier (length: 25)
+INFO 2025-04-15 06:13:52,571 authentication User 76 authenticated successfully.
+INFO 2025-04-15 06:13:52,573 views User 76 logged in successfully
+INFO 2025-04-15 06:13:53,890 views User 76 logged out successfully
+INFO 2025-04-15 06:13:59,049 views Login attempt with identifier (length: 25)
+WARNING 2025-04-15 06:13:59,363 authentication Authentication failed for user ID 76: Invalid password or inactive user.
+WARNING 2025-04-15 06:13:59,670 log Unauthorized: /api/auth/login/
+INFO 2025-04-15 06:14:02,386 views Login attempt with identifier (length: 25)
+INFO 2025-04-15 06:14:02,708 authentication User 76 authenticated successfully.
+INFO 2025-04-15 06:14:02,710 views User 76 logged in successfully
+INFO 2025-04-15 06:14:04,554 views User 76 logged out successfully
+INFO 2025-04-15 06:14:15,150 views Login attempt with identifier (length: 14)
+INFO 2025-04-15 06:14:15,153 authentication User with phone number not found (length: 14).
+WARNING 2025-04-15 06:14:15,461 log Unauthorized: /api/auth/login/
+INFO 2025-04-15 06:14:22,548 views Login attempt with identifier (length: 14)
+INFO 2025-04-15 06:14:22,551 authentication User with phone number not found (length: 14).
+WARNING 2025-04-15 06:14:22,866 log Unauthorized: /api/auth/login/
+INFO 2025-04-15 06:14:29,174 views Login attempt with identifier (length: 14)
+INFO 2025-04-15 06:14:29,177 authentication User with phone number not found (length: 14).
+WARNING 2025-04-15 06:14:29,493 log Unauthorized: /api/auth/login/
+INFO 2025-04-15 06:14:32,999 views Login attempt with identifier (length: 14)
+INFO 2025-04-15 06:14:33,002 authentication User with phone number not found (length: 14).
+WARNING 2025-04-15 06:14:33,316 log Unauthorized: /api/auth/login/
+INFO 2025-04-15 06:15:06,640 views OTP 975352 would be sent to phone: +6608768705220
+INFO 2025-04-15 06:16:05,059 views User 77 created successfully via OTP
+INFO 2025-04-15 06:16:20,548 views Login attempt with identifier (length: 14)
+INFO 2025-04-15 06:16:20,858 authentication User 77 authenticated successfully.
+INFO 2025-04-15 06:16:20,860 views User 77 logged in successfully
+INFO 2025-04-15 06:16:34,676 views Account setup completed for user ID 77
+INFO 2025-04-15 06:16:38,792 views User 77 logged out successfully
+INFO 2025-04-15 06:19:35,356 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:19:36,020 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:19:56,603 views Login attempt with identifier (length: 14)
+INFO 2025-04-15 06:19:56,606 authentication User with phone number not found (length: 14).
+WARNING 2025-04-15 06:19:56,917 log Unauthorized: /api/auth/login/
+INFO 2025-04-15 06:20:07,176 views OTP 856760 would be sent to phone: +6608768705220
+INFO 2025-04-15 06:20:22,732 views User 78 created successfully via OTP
+INFO 2025-04-15 06:20:37,718 views Login attempt with identifier (length: 14)
+INFO 2025-04-15 06:20:38,036 authentication User 78 authenticated successfully.
+INFO 2025-04-15 06:20:38,038 views User 78 logged in successfully
+INFO 2025-04-15 06:20:56,719 views Account setup completed for user ID 78
+INFO 2025-04-15 06:21:15,790 views User 78 logged out successfully
+INFO 2025-04-15 06:21:27,515 views Login attempt with identifier (length: 14)
+INFO 2025-04-15 06:21:27,518 authentication User with phone number not found (length: 14).
+WARNING 2025-04-15 06:21:27,825 log Unauthorized: /api/auth/login/
+INFO 2025-04-15 06:24:43,098 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/serializers.py changed, reloading.
+INFO 2025-04-15 06:24:43,784 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:25:21,174 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:25:21,917 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:25:29,662 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:25:30,301 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:28:30,251 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:28:32,262 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:29:31,370 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 06:29:33,261 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:31:00,816 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 06:34:41,081 views OTP 939718 would be sent to phone: +6608768705220
+INFO 2025-04-15 06:34:56,963 views User 79 created successfully via OTP
+INFO 2025-04-15 06:35:08,370 views Login attempt with email: None, phone_number: +660811111111
+WARNING 2025-04-15 06:35:08,373 views User not found for email: None, phone_number: +660811111111
+WARNING 2025-04-15 06:35:08,373 log Unauthorized: /api/auth/login/
+INFO 2025-04-15 06:35:22,369 views Login attempt with email: None, phone_number: +6608768705220
+INFO 2025-04-15 06:35:22,375 authentication User with phone number not found (length: 5).
+INFO 2025-04-15 06:35:22,692 views User 79 logged in successfully
+INFO 2025-04-15 06:35:54,415 views Account setup completed for user ID 79
+INFO 2025-04-15 06:36:04,807 views User 79 logged out successfully
+INFO 2025-04-15 06:36:17,636 views Login attempt with email: None, phone_number: +6608768705220
+INFO 2025-04-15 06:36:17,640 authentication User with phone number not found (length: 5).
+INFO 2025-04-15 06:36:17,952 views User 79 logged in successfully
+INFO 2025-04-15 06:36:20,061 views User 79 logged out successfully
+INFO 2025-04-15 06:36:31,875 views Login attempt with email: zwelinnhtet1998@gmail.com, phone_number: None
+INFO 2025-04-15 06:36:31,881 authentication User with phone number not found (length: 5).
+INFO 2025-04-15 06:36:32,192 views User 79 logged in successfully
+INFO 2025-04-15 06:36:34,194 views User 79 logged out successfully
+INFO 2025-04-15 06:37:26,401 views OTP sent to email: zwelinux.testing@gmail.com
+WARNING 2025-04-15 06:37:44,844 log Bad Request: /api/auth/verify-otp/
+INFO 2025-04-15 06:38:02,537 views User 80 created successfully via OTP
+INFO 2025-04-15 06:38:23,938 views Login attempt with email: zwelinux.testing@gmail.com, phone_number: None
+INFO 2025-04-15 06:38:23,944 authentication User with phone number not found (length: 3).
+INFO 2025-04-15 06:38:24,260 views User 80 logged in successfully
+INFO 2025-04-15 06:38:46,518 views Account setup completed for user ID 80
+INFO 2025-04-15 06:38:52,828 views User 80 logged out successfully
+INFO 2025-04-15 06:39:03,828 views Login attempt with email: None, phone_number: +6608766109458
+INFO 2025-04-15 06:39:03,834 authentication User with phone number not found (length: 3).
+INFO 2025-04-15 06:39:04,145 views User 80 logged in successfully
+INFO 2025-04-15 06:45:12,097 views User 80 logged out successfully
+INFO 2025-04-15 06:45:41,531 views OTP sent to email: zwelinux.testing@gmail.com
+INFO 2025-04-15 06:46:06,891 views User 81 created successfully via OTP
+INFO 2025-04-15 06:46:18,765 views Login attempt with email: zwelinux.testing@gmail.com, phone_number: None
+INFO 2025-04-15 06:46:18,770 authentication User with phone number not found (length: 3).
+INFO 2025-04-15 06:46:19,084 views User 81 logged in successfully
+INFO 2025-04-15 06:46:58,124 views Account setup completed for user ID 81
+INFO 2025-04-15 06:47:01,481 views User 81 logged out successfully
+INFO 2025-04-15 06:47:15,745 views Login attempt with email: None, phone_number: +6608403725844
+INFO 2025-04-15 06:47:15,751 authentication User with phone number not found (length: 3).
+INFO 2025-04-15 06:47:16,060 views User 81 logged in successfully
+INFO 2025-04-15 06:47:22,228 views User 81 logged out successfully
+INFO 2025-04-15 06:47:45,667 views OTP 130788 would be sent to phone: +6608768705220
+INFO 2025-04-15 06:48:03,515 views User 82 created successfully via OTP
+INFO 2025-04-15 06:48:15,965 views Login attempt with email: None, phone_number: +6608766109458
+WARNING 2025-04-15 06:48:15,969 views User not found for email: None, phone_number: +6608766109458
+WARNING 2025-04-15 06:48:15,969 log Unauthorized: /api/auth/login/
+INFO 2025-04-15 06:48:30,470 views Login attempt with email: None, phone_number: +6608768705220
+INFO 2025-04-15 06:48:30,485 authentication User with phone number not found (length: 5).
+INFO 2025-04-15 06:48:30,802 views User 82 logged in successfully
+INFO 2025-04-15 06:48:53,224 views Account setup completed for user ID 82
+INFO 2025-04-15 06:49:57,609 views User 82 logged out successfully
+INFO 2025-04-15 06:50:09,351 views Login attempt with email: None, phone_number: +6608768705220
+INFO 2025-04-15 06:50:09,355 authentication User with phone number not found (length: 5).
+INFO 2025-04-15 06:50:09,669 views User 82 logged in successfully
+INFO 2025-04-15 06:50:12,188 views User 82 logged out successfully
+INFO 2025-04-15 06:50:18,316 views Login attempt with email: cindy@gmail.com, phone_number: None
+INFO 2025-04-15 06:50:18,319 authentication User with phone number not found (length: 5).
+INFO 2025-04-15 06:50:18,634 views User 82 logged in successfully
+INFO 2025-04-15 06:50:26,949 views User 82 logged out successfully
+INFO 2025-04-15 06:50:39,288 views Password reset link sent via email for user ID 82
+INFO 2025-04-15 06:50:48,459 views Password reset link sent via email for user ID 82
+INFO 2025-04-15 06:51:43,354 views Login attempt with email: cindy@gmail.com, phone_number: None
+INFO 2025-04-15 06:51:43,369 authentication User with phone number not found (length: 5).
+INFO 2025-04-15 06:51:43,680 views User 82 logged in successfully
+INFO 2025-04-15 06:51:45,054 views User 82 logged out successfully
+INFO 2025-04-15 06:52:03,605 views Password reset link sent via email for user ID 82
+WARNING 2025-04-15 06:52:21,806 views Reset requested for non-existent identifier: +660876618990
+WARNING 2025-04-15 06:52:21,808 log Not Found: /api/auth/forgot-password/
+WARNING 2025-04-15 06:53:50,785 views Reset requested for non-existent identifier: +9508768705220
+WARNING 2025-04-15 06:53:50,787 log Not Found: /api/auth/forgot-password/
+INFO 2025-04-15 06:53:55,254 views Password reset link sent via email for user ID 82
+INFO 2025-04-15 07:00:13,976 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 07:00:14,727 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 07:00:43,940 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 07:00:44,471 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 07:01:47,912 views [DEV] Password reset link would be sent via SMS to +6608768705220 for user ID 82: https://ladyfirst.me/reset-password/QCUBqBfUGca68x6gbDEtbyCydDmgDgfJUiJMf9t-Oi8/
+INFO 2025-04-15 07:02:38,830 views Password reset for user ID 82
+INFO 2025-04-15 07:02:47,181 views Login attempt with email: cindy@gmail.com, phone_number: None
+INFO 2025-04-15 07:02:47,185 authentication User with phone number not found (length: 5).
+INFO 2025-04-15 07:02:47,516 views User 82 logged in successfully
+INFO 2025-04-15 07:02:50,130 views User 82 logged out successfully
+INFO 2025-04-15 07:03:05,444 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/views.py changed, reloading.
+INFO 2025-04-15 07:03:05,975 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 07:03:16,564 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/models.py changed, reloading.
+INFO 2025-04-15 07:03:17,183 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 07:03:18,518 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/models.py changed, reloading.
+INFO 2025-04-15 07:03:18,925 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 07:03:22,296 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/serializers.py changed, reloading.
+INFO 2025-04-15 07:03:22,672 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 07:03:23,984 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/serializers.py changed, reloading.
+INFO 2025-04-15 07:03:24,342 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 07:05:43,969 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/serializers.py changed, reloading.
+INFO 2025-04-15 07:05:44,564 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 08:06:00,155 views Login attempt with email: cindy@gmail.com, phone_number: None
+INFO 2025-04-15 08:06:00,186 authentication User with phone number not found (length: 5).
+INFO 2025-04-15 08:06:00,504 views User 82 logged in successfully
+INFO 2025-04-15 08:06:01,980 views User 82 logged out successfully
+INFO 2025-04-15 08:06:11,697 views Login attempt with email: None, phone_number: +6608768705220
+INFO 2025-04-15 08:06:11,703 authentication User with phone number not found (length: 5).
+INFO 2025-04-15 08:06:12,014 views User 82 logged in successfully
+INFO 2025-04-15 08:06:13,281 views User 82 logged out successfully
+INFO 2025-04-15 08:10:08,126 views OTP sent to email: testuser@example.com
+INFO 2025-04-15 08:10:49,997 views User 83 created successfully via OTP
+WARNING 2025-04-15 08:11:40,051 views Invalid OTP code for +95123456789
+WARNING 2025-04-15 08:11:40,052 log Bad Request: /api/auth/verify-otp/
+WARNING 2025-04-15 08:12:04,214 log Bad Request: /api/auth/send-otp/
+INFO 2025-04-15 08:12:10,101 views OTP 543598 would be sent to phone: +95123456789
+INFO 2025-04-15 08:12:52,832 views User 84 created successfully via OTP
+INFO 2025-04-15 08:13:09,246 views Login attempt with email: testuser@example.com, phone_number: None
+WARNING 2025-04-15 08:13:09,251 views User not found for email: testuser@example.com, phone_number: None
+WARNING 2025-04-15 08:13:09,252 log Unauthorized: /api/auth/login/
+INFO 2025-04-15 08:13:53,686 views Login attempt with email: None, phone_number: +95123456789
+INFO 2025-04-15 08:13:53,695 authentication User with phone number not found (length: 9).
+INFO 2025-04-15 08:13:54,005 views User 84 logged in successfully
+WARNING 2025-04-15 08:14:37,501 log Unauthorized: /api/auth/account-setup/
+INFO 2025-04-15 08:14:56,819 views Login attempt with email: None, phone_number: +95123456789
+INFO 2025-04-15 08:14:56,826 authentication User with phone number not found (length: 9).
+INFO 2025-04-15 08:14:57,136 views User 84 logged in successfully
+WARNING 2025-04-15 08:15:19,993 log Unauthorized: /api/auth/account-setup/
+INFO 2025-04-15 08:16:38,792 views [DEV] Password reset link would be sent via SMS to +95123456789 for user ID 84: https://ladyfirst.me/reset-password/wU_yc1zYcRwY8ylM22Q_Dm5UbtGUGekwPeH7wnUIIMY/
+INFO 2025-04-15 08:17:25,014 views Login attempt with email: None, phone_number: +95123456789
+INFO 2025-04-15 08:17:25,022 authentication User with phone number not found (length: 9).
+INFO 2025-04-15 08:17:25,341 views User 84 logged in successfully
+INFO 2025-04-15 08:18:57,206 views Login attempt with email: None, phone_number: +95123456789
+INFO 2025-04-15 08:18:57,215 authentication User with phone number not found (length: 9).
+INFO 2025-04-15 08:18:57,523 views User 84 logged in successfully
+INFO 2025-04-15 08:19:01,122 views Login attempt with email: None, phone_number: +95123456789
+INFO 2025-04-15 08:19:01,125 authentication User with phone number not found (length: 9).
+INFO 2025-04-15 08:19:01,435 views User 84 logged in successfully
+WARNING 2025-04-15 08:20:05,716 log Unauthorized: /api/auth/account-setup/
+WARNING 2025-04-15 08:21:56,942 log Method Not Allowed: /api/auth/login/
+INFO 2025-04-15 08:22:01,088 views Login attempt with email: None, phone_number: +95123456789
+INFO 2025-04-15 08:22:01,097 authentication User with phone number not found (length: 9).
+INFO 2025-04-15 08:22:01,418 views User 84 logged in successfully
+INFO 2025-04-15 08:22:55,669 views Login attempt with email: None, phone_number: +95123456789
+INFO 2025-04-15 08:22:55,681 authentication User with phone number not found (length: 9).
+INFO 2025-04-15 08:22:55,987 views User 84 logged in successfully
+INFO 2025-04-15 08:24:11,552 views Login attempt with email: None, phone_number: +95123456789
+INFO 2025-04-15 08:24:11,560 authentication User with phone number not found (length: 9).
+INFO 2025-04-15 08:24:11,869 views User 84 logged in successfully
+INFO 2025-04-15 08:26:31,233 views OTP sent to email: zwelinux.testing@gmail.com
+INFO 2025-04-15 08:26:59,872 views User 85 created successfully via OTP
+INFO 2025-04-15 08:27:12,878 views Login attempt with email: zwelinux.testing@gmail.com, phone_number: None
+INFO 2025-04-15 08:27:12,888 authentication User with phone number not found (length: 15).
+INFO 2025-04-15 08:27:13,203 views User 85 logged in successfully
+INFO 2025-04-15 08:28:43,313 views Account setup completed for user ID 85
+INFO 2025-04-15 08:28:59,668 views User 85 logged out successfully
+INFO 2025-04-15 08:29:13,612 views Login attempt with email: None, phone_number: +6608766109458
+INFO 2025-04-15 08:29:13,623 authentication User with phone number not found (length: 15).
+INFO 2025-04-15 08:29:13,939 views User 85 logged in successfully
+INFO 2025-04-15 08:29:16,932 views User 85 logged out successfully
+INFO 2025-04-15 08:30:59,488 views [DEV] Password reset link would be sent via email to zwelinux.testing@gmail.com for user ID 85: https://ladyfirst.me/reset-password/4k3OWMzBu-zNguginNXXm-WruvVut8BLBLyUB4de7qg/
+INFO 2025-04-15 08:31:12,147 views [DEV] Password reset link would be sent via SMS to +6608766109458 for user ID 85: https://ladyfirst.me/reset-password/7d4u1BD-1WmkzVxpfSzCkX9lcWQIzMBfPnbIdEnxBJU/
+INFO 2025-04-15 08:31:34,220 views Password reset for user ID 85
+INFO 2025-04-15 08:31:46,073 views Login attempt with email: None, phone_number: +6608766109458
+INFO 2025-04-15 08:31:46,079 authentication User with phone number not found (length: 15).
+INFO 2025-04-15 08:31:46,396 views User 85 logged in successfully
+INFO 2025-04-15 08:31:47,981 views User 85 logged out successfully
+INFO 2025-04-15 08:31:56,580 views Login attempt with email: zwelinux.testing@gmail.com, phone_number: None
+INFO 2025-04-15 08:31:56,590 authentication User with phone number not found (length: 15).
+INFO 2025-04-15 08:31:56,905 views User 85 logged in successfully
+INFO 2025-04-15 08:31:58,560 views User 85 logged out successfully
+INFO 2025-04-15 08:33:12,771 views Login attempt with email: None, phone_number: +9508766109458
+WARNING 2025-04-15 08:33:12,781 views User not found for email: None, phone_number: +9508766109458
+WARNING 2025-04-15 08:33:12,782 log Unauthorized: /api/auth/login/
+INFO 2025-04-15 08:33:27,702 views Login attempt with email: None, phone_number: +9508766109458
+WARNING 2025-04-15 08:33:27,706 views User not found for email: None, phone_number: +9508766109458
+WARNING 2025-04-15 08:33:27,707 log Unauthorized: /api/auth/login/
+INFO 2025-04-15 08:33:32,722 views Login attempt with email: zwelinux.testing@gmail.com, phone_number: None
+INFO 2025-04-15 08:33:32,730 authentication User with phone number not found (length: 15).
+INFO 2025-04-15 08:33:33,062 views User 85 logged in successfully
+INFO 2025-04-15 08:33:34,154 views User 85 logged out successfully
+INFO 2025-04-15 08:33:51,288 views Login attempt with email: zwelinux.testing@gmail.com, phone_number: None
+INFO 2025-04-15 08:33:51,291 authentication User with phone number not found (length: 15).
+INFO 2025-04-15 08:33:51,607 views User 85 logged in successfully
+INFO 2025-04-15 08:33:52,556 views User 85 logged out successfully
+INFO 2025-04-15 08:34:08,308 views Login attempt with email: None, phone_number: +6608766109458
+INFO 2025-04-15 08:34:08,316 authentication User with phone number not found (length: 15).
+INFO 2025-04-15 08:34:08,630 views User 85 logged in successfully
+INFO 2025-04-15 08:34:10,929 views User 85 logged out successfully
+INFO 2025-04-15 08:36:28,675 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/myproject/settings.py changed, reloading.
+INFO 2025-04-15 08:36:29,407 autoreload Watching for file changes with StatReloader
+INFO 2025-04-15 08:36:38,954 autoreload /Users/zwelinux/Projects/ladyfirst/prototypes/v2_account_setup/v2_account_setup/accounts/apps.py changed, reloading.
+INFO 2025-04-15 08:36:39,435 autoreload Watching for file changes with StatReloader

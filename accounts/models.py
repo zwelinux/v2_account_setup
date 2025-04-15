@@ -1,18 +1,16 @@
-# models.py
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.text import slugify
 from django.utils import timezone
 
-# models.py
 class CustomUser(AbstractUser):
-    email = models.EmailField(unique=True, null=True, blank=True)  # Now optional
+    email = models.EmailField(unique=True, null=True, blank=True)
     profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
-    phone_number = models.CharField(max_length=20, unique=True, null=True, blank=True)  # Now optional
+    phone_number = models.CharField(max_length=20, unique=True, null=True, blank=True)
     country = models.CharField(max_length=100, null=True, blank=True)
     province = models.CharField(max_length=100, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
-    postal_code = models.CharField(max_length=20)
+    postal_code = models.CharField(max_length=20, null=True, blank=True)
     full_address = models.TextField(null=True, blank=True)
     weight_kg = models.FloatField(null=True, blank=True)
     height_cm = models.FloatField(null=True, blank=True)
@@ -21,20 +19,54 @@ class CustomUser(AbstractUser):
     hip = models.FloatField(null=True, blank=True)
     inseam = models.FloatField(null=True, blank=True)
     foot_size_us = models.FloatField(null=True, blank=True)
+    is_setup_complete = models.BooleanField(default=False)
 
-    USERNAME_FIELD = "email"  # We'll need to adjust this
-    REQUIRED_FIELDS = ["username"]
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = []
 
     def __str__(self):
         return self.email or self.phone_number or self.username
 
     def save(self, *args, **kwargs):
-        # Ensure at least one of email or phone_number is provided
         if not self.email and not self.phone_number:
             raise ValueError("Either email or phone number must be provided.")
+
+        # Normalize phone number
+        if self.phone_number:
+            self.phone_number = self.phone_number.replace(" ", "").replace("-", "")
+
+        # Validate float fields
+        float_fields = [
+            'weight_kg', 'height_cm', 'chest_bust', 'waist',
+            'hip', 'inseam', 'foot_size_us'
+        ]
+        for field in float_fields:
+            value = getattr(self, field)
+            if value is not None and value < 0:
+                raise ValueError(f"{field} must be a positive number.")
+
         super().save(*args, **kwargs)
 
-# Category model
+# ... other imports and models remain unchanged ...
+
+class OTPCode(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
+    identifier = models.CharField(max_length=255, null=True, blank=True)  # New field
+    code = models.CharField(max_length=6, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+
+    def is_valid(self):
+        return timezone.now() <= self.expires_at
+
+    def save(self, *args, **kwargs):
+        if not self.expires_at:
+            self.expires_at = timezone.now() + timezone.timedelta(minutes=10)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"OTP for {self.identifier or self.user.email or self.user.phone_number}: {self.code}"
+
 class Category(models.Model):
     title = models.CharField(max_length=255, unique=True)
     category_slug = models.SlugField(max_length=255, unique=True, blank=True)
@@ -57,7 +89,6 @@ class Category(models.Model):
             self.category_slug = unique_slug
         super().save(*args, **kwargs)
 
-# Brand model
 class Brand(models.Model):
     title = models.CharField(max_length=255, unique=True)
     brand_slug = models.SlugField(max_length=255, unique=True, blank=True)
@@ -79,7 +110,6 @@ class Brand(models.Model):
             self.brand_slug = unique_slug
         super().save(*args, **kwargs)
 
-# Product model
 class Product(models.Model):
     CONDITION_CHOICES = [
         ('brand_new', 'Brand New'),
@@ -128,7 +158,8 @@ class Product(models.Model):
     size = models.CharField(max_length=100, choices=SIZE_CHOICES, default='M')
     color = models.CharField(max_length=255, choices=COLOR_CHOICES, default='white')
     authenticity_document = models.FileField(upload_to='authenticity_documents/', null=True, blank=True)
-    image = models.ImageField(upload_to='products/', default='default_product.jpg')
+    image = models.ImageField(upload_to='products/', null=True, blank=True)  # Made nullable for development
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -148,7 +179,6 @@ class Product(models.Model):
             self.product_slug = unique_slug
         super().save(*args, **kwargs)
 
-# Order model
 class Order(models.Model):
     ORDER_STATUS_CHOICES = [
         ('Pending', 'Pending'),
@@ -169,12 +199,13 @@ class Order(models.Model):
     payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES, default='Pending')
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ('buyer', 'product')  # Note: This may cause IntegrityError during testing
+
     def save(self, *args, **kwargs):
-        if not self.pk:
-            self.total_price = self.product.second_hand_price * self.quantity
+        self.total_price = self.product.second_hand_price * self.quantity
         super().save(*args, **kwargs)
 
-# Message model
 class Message(models.Model):
     sender = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='sent_messages')
     receiver = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='received_messages')
@@ -189,7 +220,6 @@ class Message(models.Model):
             self.read_at = timezone.now()
             self.save(update_fields=['is_read', 'read_at'])
 
-# Review model
 class Review(models.Model):
     reviewer = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     seller = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='reviews')
@@ -199,12 +229,7 @@ class Review(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('reviewer', 'seller')
-
-# accounts/models.py
-from django.db import models
-from django.utils import timezone
-from .models import CustomUser
+        unique_together = ('reviewer', 'seller')  # Note: This may cause IntegrityError during testing
 
 class PasswordResetToken(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -217,7 +242,7 @@ class PasswordResetToken(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.expires_at:
-            self.expires_at = timezone.now() + timezone.timedelta(hours=1)  # 1-hour validity
+            self.expires_at = timezone.now() + timezone.timedelta(hours=1)
         super().save(*args, **kwargs)
 
     def __str__(self):

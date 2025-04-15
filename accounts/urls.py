@@ -1,35 +1,48 @@
 from django.urls import path, include
-from rest_framework import routers
-from .views import (
-    RegisterView, LoginView, LogoutView, UserView, ProductViewSet, UserListView,
-    CategoryViewSet, BrandViewSet, MyProductsView, ProductDetailView,
-    PublicUserProfileView, PublicUserProductsView, PlaceOrderView,
-    MyOrderHistoryView, OrderPaymentView, SellerOrderView, UpdateOrderStatusView,
-    ForgotPasswordView, ResetPasswordView  # New import
-)
+from rest_framework.routers import DefaultRouter
+from . import views
 from rest_framework_simplejwt.views import TokenRefreshView
 
-router = routers.DefaultRouter()
-router.register(r'products', ProductViewSet, basename='products')
-router.register(r'categories', CategoryViewSet)
-router.register(r'brands', BrandViewSet)
+router = DefaultRouter()
+router.register(r'products', views.ProductViewSet, basename='product')
+router.register(r'categories', views.CategoryViewSet, basename='category')
+router.register(r'brands', views.BrandViewSet, basename='brand')
+
+# Authentication URLs
+auth_patterns = [
+    path('send-otp/', views.SendOTPView.as_view(), name='send_otp'),
+    path('verify-otp/', views.VerifyOTPView.as_view(), name='verify_otp'),
+    path('register/', views.RegisterView.as_view(), name='register'),
+    path('login/', views.LoginView.as_view(), name='login'),
+    path('logout/', views.LogoutView.as_view(), name='logout'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('forgot-password/', views.ForgotPasswordView.as_view(), name='forgot_password'),
+    path('reset-password/<str:token>/', views.ResetPasswordView.as_view(), name='reset_password'),
+]
+
+# User-related URLs
+user_patterns = [
+    path('user/', views.UserView.as_view(), name='user'),
+    path('account-setup/', views.AccountSetupView.as_view(), name='account_setup'),
+    path('users/', views.UserListView.as_view(), name='user_list'),
+    path('profile/<str:username>/', views.PublicUserProfileView.as_view(), name='public_user_profile'),
+    path('user-products/<str:username>/', views.PublicUserProductsView.as_view(), name='public_user_products'),
+]
+
+# Product and order-related URLs
+product_order_patterns = [
+    path('my-products/', views.MyProductsView.as_view(), name='my_products'),
+    path('orders/', views.MyOrderHistoryView.as_view(), name='order_history'),
+    path('seller/orders/', views.SellerOrderView.as_view(), name='seller_orders'),
+    path('place-order/', views.PlaceOrderView.as_view(), name='place_order'),
+    path('order/<int:order_id>/pay/', views.OrderPaymentView.as_view(), name='order_payment'),
+    path('order/<int:order_id>/status/', views.UpdateOrderStatusView.as_view(), name='update_order_status'),
+    path('product/<int:id>/', views.ProductDetailView.as_view(), name='product_detail'),
+]
 
 urlpatterns = [
-    path('register/', RegisterView.as_view(), name='register'),
-    path('login/', LoginView.as_view(), name='login'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('logout/', LogoutView.as_view(), name='logout'),
-    path('user/', UserView.as_view(), name='user'),
-    path('users/', UserListView.as_view(), name='user-list'),
-    path('myproducts/', MyProductsView.as_view(), name='my-products'),
-    path('profile/<str:username>/', PublicUserProfileView.as_view(), name='public-profile'),
-    path('profile/<str:username>/products/', PublicUserProductsView.as_view(), name='public-user-products'),
-    path('place-order/', PlaceOrderView.as_view(), name='place-order'),
-    path('myorders/', MyOrderHistoryView.as_view(), name='my-orders'),
-    path('pay-order/<int:order_id>/', OrderPaymentView.as_view(), name='pay-order'),
-    path('seller/orders/', SellerOrderView.as_view(), name='seller-orders'),
-    path('seller/orders/<int:order_id>/update-status/', UpdateOrderStatusView.as_view(), name='update-order-status'),
-    path('forgot-password/', ForgotPasswordView.as_view(), name='forgot-password'),
-    path('reset-password/<str:token>/', ResetPasswordView.as_view(), name='reset-password'),
     path('', include(router.urls)),
+    path('', include(auth_patterns)),  # Remove 'auth/' prefix
+    path('', include(user_patterns)),
+    path('', include(product_order_patterns)),
 ]
